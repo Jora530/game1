@@ -351,7 +351,7 @@ const scoreEl = $('#score'), distEl = $('#dist'), coinsEl = $('#coins');
 const LANES = [0,1,2];
 const DOG_DELAY = 15;
 const POWER_DURATION = 15;
-const JUMP_V = 700, JUMP_V_SHOES = 1050, GRAVITY = 2600, CLEAR_H = 50;
+const JUMP_V = 700, JUMP_V_SHOES = 1050, GRAVITY = 2600, CLEAR_H = 60;
 
 /* ---------- state ---------- */
 let totalCoins = parseInt(localStorage.getItem('schoolrush_coins') || '0', 10);
@@ -469,7 +469,7 @@ function updatePowerupUI() {
 
 /* ---------- spawning ---------- */
 function spawnObj(type, lane, depth, oy) {
-  const sizes = { coin:44, star:54, shoes:60, plane:80, rock:66, cone:50, box:64 };
+  const sizes = { coin:44, star:54, shoes:60, plane:80, rock:84, cone:64, box:84 };
   const el = document.createElement('div');
   el.className = 'obj ' + type;
   el.style.width = sizes[type] + 'px';
@@ -481,16 +481,20 @@ function spawnObj(type, lane, depth, oy) {
 function spawnEvent() {
   const r = Math.random();
   const l = Math.floor(Math.random()*3);
-  if (r < 0.42) { // coin line (abundant)
+  if (r < 0.34) { // coin line (abundant)
     const n = 4 + Math.floor(Math.random()*3);
     for (let i=0;i<n;i++) spawnObj('coin', l, 1.0 + i*0.17);
-  } else if (r < 0.70) { // single coin or small group
+  } else if (r < 0.56) { // single coin or small group
     spawnObj('coin', l, 1.0);
     if (Math.random() < 0.5) spawnObj('coin', l, 1.18);
-  } else if (r < 0.84) { // obstacle
+  } else if (r < 0.86) { // obstacle (frequent)
     const t = ['rock','cone','box'][Math.floor(Math.random()*3)];
     spawnObj(t, l, 1.0);
-  } else if (r < 0.90) { // plane
+    if (Math.random() < 0.4) { // extra obstacle in an adjacent lane
+      const l2 = (l + (Math.random() < 0.5 ? 1 : 2)) % 3;
+      spawnObj(['rock','cone','box'][Math.floor(Math.random()*3)], l2, 1.12);
+    }
+  } else if (r < 0.92) { // plane
     spawnObj('plane', l, 1.0, 12);
   } else if (r < 0.96) { // star
     spawnObj('star', l, 1.0);
@@ -604,7 +608,7 @@ function loop(now) {
 
       // spawn
       spawnAcc += dt;
-      const interval = Math.max(0.55, 1.05 - as * 0.55);
+      const interval = Math.max(0.5, 0.95 - as * 0.5);
       if (spawnAcc >= interval) { spawnAcc = 0; spawnEvent(); }
 
       // objects
