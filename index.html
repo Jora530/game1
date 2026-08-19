@@ -158,6 +158,82 @@
   .controls-hint { position:absolute; bottom:12px; left:50%; transform:translateX(-50%); z-index:28; pointer-events:none;
     color:#fff; font-weight:800; font-size:14px; background:rgba(0,0,0,0.4); padding:7px 16px; border-radius:30px; }
 
+  /* ---- pause ---- */
+  #pause-btn { position:absolute; top:12px; right:14px; z-index:31; width:46px; height:46px; border-radius:50%;
+    background:rgba(255,255,255,0.92); border:none; font-size:20px; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.2);
+    transition: transform .12s ease; }
+  #pause-btn:hover { transform: scale(1.08); }
+  #pause-overlay { position:absolute; inset:0; z-index:45; display:flex; align-items:center; justify-content:center;
+    background:rgba(15,30,50,0.62); backdrop-filter:blur(3px); }
+  .pause-card { background:#fff; border-radius:26px; padding:28px 36px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.4);
+    animation: cardIn .3s cubic-bezier(.2,1.2,.3,1); }
+  .pause-card h2 { font-size:32px; font-weight:900; color:#1e3a5f; margin-bottom:16px; }
+  .pause-card button { display:block; width:100%; margin:9px 0; padding:13px; border:none; border-radius:40px; font-size:17px; font-weight:800; cursor:pointer; }
+  #resume-btn { background:var(--olive); color:#fff; box-shadow:0 5px 0 #3d5514; }
+  #pause-menu-btn { background:#e2e8f0; color:#1e3a5f; box-shadow:0 5px 0 #cbd5e1; }
+  #game-area.paused * { animation-play-state: paused !important; }
+
+  /* ---- advanced background & juice ---- */
+  .vignette { position:absolute; inset:0; z-index:3; pointer-events:none;
+    background: radial-gradient(ellipse at 50% 42%, transparent 52%, rgba(20,35,60,0.30) 100%); }
+
+  .dust { position:absolute; z-index:4; border-radius:50%; background:rgba(255,255,255,0.6);
+    pointer-events:none; box-shadow:0 0 6px rgba(255,255,255,0.5); animation: dustFloat linear infinite; }
+  @keyframes dustFloat {
+    0% { transform: translateY(0) translateX(0); opacity:0; }
+    12% { opacity:0.7; }
+    85% { opacity:0.45; }
+    100% { transform: translateY(-52vh) translateX(24px); opacity:0; }
+  }
+
+  .poster { position:absolute; z-index:1; border-radius:5px; border:3px solid #fff;
+    box-shadow:0 3px 8px rgba(0,0,0,0.3); }
+  .poster::after { content:""; position:absolute; left:12%; right:12%; top:14%; height:4px; background:rgba(0,0,0,0.18); border-radius:2px; }
+  .poster.p1 { background: linear-gradient(135deg,#ffd400,#f59e0b); }
+  .poster.p2 { background: linear-gradient(135deg,#3b82f6,#2563eb); }
+  .poster.p3 { background: linear-gradient(135deg,#22c55e,#16a34a); }
+
+  .far-wall .clock::after { animation: clockTick 24s linear infinite; }
+  @keyframes clockTick { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  #game-area.shake { animation: screenShake 0.45s ease; }
+  @keyframes screenShake {
+    0%,100% { transform: translate(0,0); }
+    15% { transform: translate(-9px,6px); }
+    30% { transform: translate(8px,-5px); }
+    45% { transform: translate(-7px,-4px); }
+    60% { transform: translate(6px,3px); }
+    80% { transform: translate(-3px,2px); }
+  }
+
+  #player svg.land { animation: landSquash 0.28s ease; transform-origin: 50% 100%; }
+  @keyframes landSquash {
+    0% { transform: scaleY(0.82) scaleX(1.14); }
+    55% { transform: scaleY(1.08) scaleX(0.94); }
+    100% { transform: scaleY(1) scaleX(1); }
+  }
+
+  .ring { position:absolute; z-index:26; border-radius:50%; border:4px solid #fff; pointer-events:none;
+    animation: ringOut 0.5s ease-out forwards; }
+  @keyframes ringOut { 0% { transform: translate(-50%,-50%) scale(0.2); opacity:1; }
+    100% { transform: translate(-50%,-50%) scale(1.9); opacity:0; } }
+
+  .streak { position:absolute; z-index:5; pointer-events:none; height:2px; border-radius:2px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.75), transparent);
+    animation: streakFly 0.6s linear forwards; }
+  @keyframes streakFly { from { transform: translateX(-220px); opacity:0; } 15% { opacity:0.9; }
+    to { transform: translateX(112vw); opacity:0; } }
+
+  #milestone { position:absolute; top:30%; left:50%; transform:translateX(-50%); z-index:36; pointer-events:none;
+    font-weight:900; font-size:36px; color:#ffd400; text-shadow:0 3px 0 #b45309, 0 10px 24px rgba(0,0,0,0.45);
+    animation: milestonePop 1.2s ease forwards; }
+  @keyframes milestonePop {
+    0% { transform:translateX(-50%) scale(0.3); opacity:0; }
+    25% { transform:translateX(-50%) scale(1.25); opacity:1; }
+    70% { transform:translateX(-50%) scale(1); opacity:1; }
+    100% { transform:translateX(-50%) scale(0.9); opacity:0; }
+  }
+
   /* ============ OVER ============ */
   #over-screen { display:flex; align-items:center; justify-content:center; padding:20px; background:rgba(15,30,50,0.55); backdrop-filter:blur(4px); z-index:50; }
   .over-card { background:#fff; border-radius:30px; padding:28px 34px; text-align:center; box-shadow:0 30px 70px rgba(0,0,0,0.4);
@@ -190,7 +266,7 @@
     <div class="char-cards" id="char-cards"></div>
     <div class="sec-title">🛒 Dyqani — blej me monedha</div>
     <div class="shop-cards" id="shop-cards"></div>
-    <div class="best-badge" style="margin-bottom:10px;">🏆 Rekordi: <span id="best-select">0</span> pikë</div>
+    <div class="best-badge" style="margin-bottom:10px;">🏆 Rekordi: <span id="best-select">0</span> pikë · <span id="best-dist-select">0</span>m</div>
   </div>
 
   <!-- ============ GAME ============ -->
@@ -204,6 +280,14 @@
       <div class="pu-chip star hidden" id="pu-star">⭐ <span id="pu-star-t">15s</span><div class="bar"><i id="pu-star-bar" style="width:100%"></i></div></div>
       <div class="pu-chip shoes hidden" id="pu-shoes">👟 <span id="pu-shoes-t">15s</span><div class="bar"><i id="pu-shoes-bar" style="width:100%"></i></div></div>
     </div>
+    <button id="pause-btn" class="hidden">⏸</button>
+    <div id="pause-overlay" class="hidden">
+      <div class="pause-card">
+        <h2>⏸ Pauzë</h2>
+        <button id="resume-btn">▶ Vazhdo</button>
+        <button id="pause-menu-btn">🏠 Menu</button>
+      </div>
+    </div>
     <div id="game-area">
       <div class="ceiling"></div>
       <div class="far-wall">
@@ -214,7 +298,17 @@
       </div>
       <div class="locker-wall left"></div>
       <div class="locker-wall right"></div>
+      <div class="poster p1" style="left:3%;top:45%;width:60px;height:80px;"></div>
+      <div class="poster p2" style="right:3%;top:40%;width:64px;height:84px;"></div>
+      <div class="poster p3" style="left:5%;top:66%;width:52px;height:68px;"></div>
       <div class="floor"></div>
+      <div class="vignette"></div>
+      <div class="dust" style="width:5px;height:5px;left:12%;bottom:8%;animation-duration:9s;"></div>
+      <div class="dust" style="width:4px;height:4px;left:32%;bottom:14%;animation-duration:12s;animation-delay:2s;"></div>
+      <div class="dust" style="width:6px;height:6px;left:55%;bottom:6%;animation-duration:10s;animation-delay:4s;"></div>
+      <div class="dust" style="width:4px;height:4px;left:72%;bottom:18%;animation-duration:13s;animation-delay:1s;"></div>
+      <div class="dust" style="width:5px;height:5px;left:88%;bottom:10%;animation-duration:11s;animation-delay:3s;"></div>
+      <div class="dust" style="width:3px;height:3px;left:44%;bottom:22%;animation-duration:14s;animation-delay:5s;"></div>
       <div id="player"></div>
       <div id="chasers"></div>
       <div id="objects"></div>
@@ -282,20 +376,26 @@ const cap = (c, dark) => `
   <path d="M40 40 Q40 16 60 16 Q80 16 80 40 Z" fill="${c}"/>
   <path d="M37 39 Q60 42 83 39 Q83 44 60 44 Q37 44 37 39 Z" fill="${dark}"/>
   <circle cx="60" cy="26" r="2.4" fill="${dark}"/>`;
+const DRESS = (c) => `
+  <path d="M40 70 L40 92 Q40 100 48 100 L72 100 Q80 100 80 92 L80 70 Q60 64 40 70 Z" fill="${c}"/>
+  <path d="M42 100 Q28 130 28 158 Q28 166 44 166 L76 166 Q92 166 92 158 Q92 130 78 100 Z" fill="${c}"/>`;
+const RED_LEGS = `
+  <g class="leg legL"><rect x="49" y="163" width="8" height="9" rx="3" fill="${SKIN}"/><ellipse cx="53" cy="176" rx="8.5" ry="5" fill="#8a1f2d"/></g>
+  <g class="leg legR"><rect x="63" y="163" width="8" height="9" rx="3" fill="${SKIN}"/><ellipse cx="67" cy="176" rx="8.5" ry="5" fill="#8a1f2d"/></g>`;
 
 const CHARACTERS = {
-  sky: { name:"Sky", color:"#3b82f6", price:0, desc:"Vajzë me flokë të verdha, pantallona e bluzë",
-    svg:`<svg viewBox="0 0 120 184">${hairLong("#f6b73c")}${EARS}<ellipse cx="60" cy="36" rx="21" ry="24" fill="${SKIN}"/>${face(38)}${NECK}${TORSO("#38bdf8")}<path d="M42 72 L60 80 L78 72" stroke="#0ea5e9" stroke-width="3" fill="none"/>${ARMS}${LEGS_PANTS("#3b5998")}</svg>` },
-  tricky: { name:"Tricky", color:"#ff9d3d", price:0, desc:"Vajzë me flokë kafe në bun, shorce e bluzë",
+  sky: { name:"Sky", color:"#3b82f6", price:0, desc:"Vajzë me flokë të gjata të errëta, bluzë e pantallona blu",
+    svg:`<svg viewBox="0 0 120 184">${hairLong("#1a1a2e")}${EARS}<ellipse cx="60" cy="36" rx="21" ry="24" fill="${SKIN}"/>${face(38)}${NECK}${TORSO("#1e3a5f")}${ARMS}${LEGS_PANTS("#16293f")}</svg>` },
+  tricky: { name:"Tricky", color:"#ff9d3d", price:0, desc:"Vajzë me flokë kafe në bun, bluzë rozë e shorce",
     svg:`<svg viewBox="0 0 120 184">${hairBun("#7a5230")}${EARS}<ellipse cx="60" cy="36" rx="21" ry="24" fill="${SKIN}"/>${face(38)}${NECK}${TORSO("#f472b6")}<path d="M42 72 L60 80 L78 72" stroke="#db2777" stroke-width="3" fill="none"/>${ARMS}${LEGS_SHORTS("#6366f1")}</svg>` },
   spike: { name:"Spike", color:"#ef4444", price:0, desc:"Djalë me kapuç të vogël të kuq, bluzë të bardhë e xhinse",
     svg:`<svg viewBox="0 0 120 184">${hairShort("#2b2b2b")}${EARS}<ellipse cx="60" cy="36" rx="21" ry="24" fill="${SKIN}"/>${cap("#ef4444","#b91c1c")}${face(42)}${NECK}${TORSO("#f5f5f5","#d4d4d4")}${ARMS}${LEGS_PANTS("#4a6fa5")}</svg>` },
-  luna: { name:"Luna", color:"#8b5cf6", price:150, desc:"Vajzë me flokë të purpurta e rroba vjollcë",
-    svg:`<svg viewBox="0 0 120 184">${hairLong("#a78bfa")}${EARS}<ellipse cx="60" cy="36" rx="21" ry="24" fill="${SKIN}"/>${face(38)}${NECK}${TORSO("#8b5cf6")}${ARMS}${LEGS_PANTS("#4c1d95")}</svg>` },
+  luna: { name:"Luna", color:"#8b5cf6", price:150, desc:"Vajzë me flokë të gjatë të errët e fustan të kuq",
+    svg:`<svg viewBox="0 0 120 184">${hairLong("#2b2b2b")}${EARS}<ellipse cx="60" cy="36" rx="21" ry="24" fill="${SKIN}"/>${face(38)}${NECK}${DRESS("#b0273a")}${ARMS}${RED_LEGS}</svg>` },
   rex: { name:"Rex", color:"#f97316", price:250, desc:"Djalë me flokë portokalli me gjemba e kapuç jeshil",
     svg:`<svg viewBox="0 0 120 184">${hairSpiky("#f97316")}${EARS}<ellipse cx="60" cy="36" rx="21" ry="24" fill="${SKIN}"/>${face(38)}${NECK}${TORSO("#22c55e")}${ARMS}${LEGS_PANTS("#374151")}</svg>` },
-  mia: { name:"Mia", color:"#ef4444", price:350, desc:"Vajzë me flokë të kuqe, bluzë të verdhë e shorce",
-    svg:`<svg viewBox="0 0 120 184"><path d="M40 32 Q20 40 18 70 Q16 82 24 78 Q34 74 40 60 Z" fill="#ef4444"/>${hairShort("#ef4444")}${EARS}<ellipse cx="60" cy="36" rx="21" ry="24" fill="${SKIN}"/>${face(38)}${NECK}${TORSO("#facc15")}${ARMS}${LEGS_SHORTS("#334155")}</svg>` },
+  mia: { name:"Mia", color:"#ef4444", price:350, desc:"Vajzë me flokë të errët me bisht e fustan të kuq",
+    svg:`<svg viewBox="0 0 120 184"><path d="M40 32 Q20 40 18 70 Q16 82 24 78 Q34 74 40 60 Z" fill="#2b2b2b"/>${hairShort("#2b2b2b")}${EARS}<ellipse cx="60" cy="36" rx="21" ry="24" fill="${SKIN}"/>${face(38)}${NECK}${DRESS("#b0273a")}${ARMS}${RED_LEGS}</svg>` },
   blaze: { name:"Blaze", color:"#3b82f6", price:500, desc:"Djalë me kapuç blu të kthyer, bluzë të errët",
     svg:`<svg viewBox="0 0 120 184">${hairShort("#2b2b2b")}${EARS}<ellipse cx="60" cy="36" rx="21" ry="24" fill="${SKIN}"/>${cap("#3b82f6","#1e40af")}${face(42)}${NECK}${TORSO("#334155")}${ARMS}${LEGS_PANTS("#1f2937")}</svg>` },
 };
@@ -316,14 +416,15 @@ const backCap = (c, d) => `
   <path d="M40 40 Q40 16 60 16 Q80 16 80 40 Z" fill="${c}"/>
   <circle cx="60" cy="26" r="2.4" fill="${d}"/>`;
 const backView = (head, shirt, legs, stroke) => `<svg viewBox="0 0 120 184">${head}${TORSO(shirt, stroke)}${ARMS}${legs}</svg>`;
+const girlBack = (head) => `<svg viewBox="0 0 120 184">${head}${DRESS("#b0273a")}${ARMS}${RED_LEGS}</svg>`;
 
 const BACKS = {
-  sky:   backView(backHairLong("#f6b73c"), "#38bdf8", LEGS_PANTS("#3b5998")),
+  sky:   backView(backHairLong("#1a1a2e"), "#1e3a5f", LEGS_PANTS("#16293f")),
   tricky: backView(backHairBun("#7a5230"), "#f472b6", LEGS_SHORTS("#6366f1")),
   spike: backView(backCap("#ef4444","#b91c1c"), "#f5f5f5", LEGS_PANTS("#4a6fa5"), "#d4d4d4"),
-  luna:  backView(backHairLong("#a78bfa"), "#8b5cf6", LEGS_PANTS("#4c1d95")),
+  luna:  girlBack(backHairLong("#2b2b2b")),
   rex:   backView(backHairSpiky("#f97316"), "#22c55e", LEGS_PANTS("#374151")),
-  mia:   backView(backHairBun("#ef4444"), "#facc15", LEGS_SHORTS("#334155")),
+  mia:   girlBack(backHairBun("#2b2b2b")),
   blaze: backView(backCap("#3b82f6","#1e40af"), "#334155", LEGS_PANTS("#1f2937")),
 };
 
@@ -350,20 +451,23 @@ const scoreEl = $('#score'), distEl = $('#dist'), coinsEl = $('#coins');
 /* ---------- config ---------- */
 const LANES = [0,1,2];
 const DOG_DELAY = 15;
+const DOG_CHASE_DURATION = 15;
 const POWER_DURATION = 15;
 const JUMP_V = 700, JUMP_V_SHOES = 1050, GRAVITY = 2600, CLEAR_H = 60;
+const COIN_SPEEDUP = 15;
 
 /* ---------- state ---------- */
 let totalCoins = parseInt(localStorage.getItem('schoolrush_coins') || '0', 10);
 let owned = JSON.parse(localStorage.getItem('schoolrush_owned') || '["sky","tricky","spike"]');
 let best = parseInt(localStorage.getItem('schoolrush_best') || '0', 10);
+let bestDist = parseInt(localStorage.getItem('schoolrush_bestdist') || '0', 10);
 let S = { screen:'select', phase:'idle' };
 let char = 'sky';
 let lane = 1, jumpH = 0, vy = 0, onGround = true;
 let objects = [];
 let distPx = 0, coins = 0, score = 0;
 let puStar = 0, puShoes = 0;
-let elapsed = 0, spawnAcc = 0;
+let elapsed = 0, spawnAcc = 0, speedLevel = 0, scoreMilestone = 0;
 let dogActive = false, dogGap = 0, dogBarkTimer = 0;
 let lastTime = 0;
 let area = { w:0, h:0 }, vx = 0, vy0 = 0, spread = 0, groundY = 0;
@@ -406,6 +510,7 @@ function laneX(l) { return vx + (l - 1) * spread; }
 function buildMenu() {
   $('#coins-total').textContent = totalCoins;
   $('#best-select').textContent = best;
+  $('#best-dist-select').textContent = bestDist;
   const playWrap = $('#char-cards'); playWrap.innerHTML = '';
   const shopWrap = $('#shop-cards'); shopWrap.innerHTML = '';
   Object.entries(CHARACTERS).forEach(([k, c]) => {
@@ -436,15 +541,18 @@ function buyChar(k) {
 /* ---------- start ---------- */
 function startGame(charKey) {
   char = charKey;
-  S = { screen:'game', phase:'countdown', countdown:3.0 };
+  S = { screen:'game', phase:'countdown', countdown:3.0, paused:false };
   objects.forEach(o => o.el.remove()); objects = [];
   chasersLayer.innerHTML = '';
   lane = 1; jumpH = 0; vy = 0; onGround = true;
   distPx = 0; coins = 0; score = 0; spawnAcc = 0;
-  puStar = 0; puShoes = 0; elapsed = 0;
+  puStar = 0; puShoes = 0; elapsed = 0; speedLevel = 0; scoreMilestone = 0;
   dogActive = false; dogGap = 0; dogBarkTimer = 0;
 
   selectScreen.classList.add('hidden'); overScreen.classList.add('hidden'); gameScreen.classList.remove('hidden');
+  $('#pause-btn').classList.remove('hidden');
+  $('#pause-overlay').classList.add('hidden');
+  gameArea.classList.remove('paused');
   playerEl.innerHTML = BACKS[char] || CHARACTERS[char].svg;
   playerEl.className = 'running';
   computeLayout();
@@ -523,24 +631,58 @@ function warn(msg) {
   const w = document.createElement('div'); w.className='warn'; w.textContent = msg;
   gameArea.appendChild(w); w.addEventListener('animationend', ()=>w.remove());
 }
+function dustPuff(x, y) {
+  for (let i=0;i<6;i++){
+    const p = document.createElement('div'); p.className='particle';
+    const s = 5 + Math.random()*7; p.style.width=s+'px'; p.style.height=s+'px';
+    p.style.background = '#e8e2d0';
+    p.style.left = (x + (Math.random()-0.5)*34) + 'px'; p.style.top = y + 'px';
+    p.style.setProperty('--px', (Math.random()-0.5)*90+'px');
+    p.style.setProperty('--py', -(10+Math.random()*30)+'px');
+    particlesLayer.appendChild(p); p.addEventListener('animationend', ()=>p.remove());
+  }
+}
+function ring(x, y, color, size) {
+  const r = document.createElement('div'); r.className='ring';
+  r.style.left=x+'px'; r.style.top=y+'px';
+  r.style.width=(size||60)+'px'; r.style.height=(size||60)+'px';
+  if (color) r.style.borderColor = color;
+  gameArea.appendChild(r); r.addEventListener('animationend', ()=>r.remove());
+}
+function streak() {
+  const s = document.createElement('div'); s.className='streak';
+  s.style.top = (area.h * (0.2 + Math.random()*0.5)) + 'px';
+  s.style.width = (60 + Math.random()*140) + 'px';
+  gameArea.appendChild(s); s.addEventListener('animationend', ()=>s.remove());
+}
+function milestoneFlash(pts) {
+  const m = document.createElement('div'); m.id='milestone';
+  m.textContent = '🎉 ' + pts + ' pikë!';
+  gameArea.appendChild(m); m.addEventListener('animationend', ()=>m.remove());
+}
 
 /* ---------- collect ---------- */
 function collect(o, cx, cy) {
   const mult = puStar > 0 ? 2 : 1;
-  if (o.type === 'coin') { coins++; score += 10*mult; sfx.coin(); burst(cx, cy, ['#ffd400','#fff8c0','#ffe98a'], 6); floatText(cx, cy, '+'+(10*mult), '#ffd400'); }
-  else if (o.type === 'plane') { score += 100*mult; sfx.plane(); burst(cx, cy, ['#ffd400','#fff','#ffe98a','#fff3c4'], 14); floatText(cx, cy, '+'+(100*mult)+' ✈️', '#ffd400'); }
-  else if (o.type === 'star') { puStar = POWER_DURATION; score += 50*mult; sfx.star(); burst(cx, cy, ['#ffd400','#fff','#ffe98a'], 12); floatText(cx, cy, '⭐ x2 pikë!', '#ffd400'); }
-  else if (o.type === 'shoes') { puShoes = POWER_DURATION; score += 50*mult; sfx.shoes(); burst(cx, cy, ['#3b82f6','#93c5fd','#fff'], 12); floatText(cx, cy, '👟 Kërcim i lartë!', '#60a5fa'); }
+  if (o.type === 'coin') { coins++; score += 10*mult; sfx.coin(); burst(cx, cy, ['#ffd400','#fff8c0','#ffe98a'], 6); ring(cx, cy, '#ffd400', 50); floatText(cx, cy, '+'+(10*mult), '#ffd400'); }
+  else if (o.type === 'plane') { score += 100*mult; sfx.plane(); burst(cx, cy, ['#ffd400','#fff','#ffe98a','#fff3c4'], 14); ring(cx, cy, '#ffd400', 90); floatText(cx, cy, '+'+(100*mult)+' ✈️', '#ffd400'); }
+  else if (o.type === 'star') { puStar = POWER_DURATION; score += 50*mult; sfx.star(); burst(cx, cy, ['#ffd400','#fff','#ffe98a'], 12); ring(cx, cy, '#ffd400', 110); floatText(cx, cy, '⭐ x2 pikë!', '#ffd400'); }
+  else if (o.type === 'shoes') { puShoes = POWER_DURATION; score += 50*mult; sfx.shoes(); burst(cx, cy, ['#3b82f6','#93c5fd','#fff'], 12); ring(cx, cy, '#60a5fa', 110); floatText(cx, cy, '👟 Kërcim i lartë!', '#60a5fa'); }
   updateHUD(); updatePowerupUI();
 }
 
 /* ---------- death ---------- */
 function die(reason) {
   S.phase = 'over';
+  gameArea.classList.add('shake');
+  setTimeout(() => gameArea.classList.remove('shake'), 500);
+  $('#pause-btn').classList.add('hidden');
   playerEl.classList.add('dead'); playerEl.classList.remove('running','jump');
   sfx.die();
   totalCoins += coins;
   localStorage.setItem('schoolrush_coins', String(totalCoins));
+  const curDist = Math.floor(distPx/40);
+  if (curDist > bestDist) { bestDist = curDist; localStorage.setItem('schoolrush_bestdist', String(bestDist)); }
   const isNew = Math.floor(score) > best;
   if (isNew) { best = Math.floor(score); localStorage.setItem('schoolrush_best', String(best)); }
   $('#over-title').textContent = reason === 'dog' ? '🐕 Qeni e arsimtari të kapën!' : '💥 U përplase me pengesën!';
@@ -557,7 +699,7 @@ function die(reason) {
 function loop(now) {
   const dt = Math.min(0.05, (now - lastTime)/1000);
   lastTime = now;
-  if (S.screen === 'game') {
+  if (S.screen === 'game' && !S.paused) {
     if (S.phase === 'countdown') {
       S.countdown -= dt;
       const n = Math.ceil(S.countdown);
@@ -565,39 +707,55 @@ function loop(now) {
       else { countdownEl.classList.add('hidden'); S.phase = 'playing'; goFlashEl.classList.remove('hidden'); setTimeout(()=>goFlashEl.classList.add('hidden'), 800); tone(660,.2,'sine',.2,990); }
     } else if (S.phase === 'playing') {
       elapsed += dt;
-      const as = 0.5 + Math.min(0.6, elapsed * 0.013);   // approach speed (depth/s)
+      const coinLevel = Math.floor(coins / COIN_SPEEDUP);
+      const as = Math.min(1.35, 0.5 + Math.min(0.6, elapsed * 0.013) + coinLevel * 0.08);
+      if (coinLevel > speedLevel) { speedLevel = coinLevel; warn('⚡ Shpejtësi +! (' + (coinLevel*COIN_SPEEDUP) + ' monedha)'); for (let i=0;i<7;i++) streak(); }
       const mult = puStar > 0 ? 2 : 1;
 
       distPx += as * 500 * dt;
       score += as * 500 * dt * 0.04 * mult;
+      const ms = Math.floor(score / 1000);
+      if (ms > scoreMilestone) { scoreMilestone = ms; milestoneFlash(ms * 1000); }
 
       if (puStar > 0) { puStar -= dt; if (puStar <= 0) puStar = 0; }
       if (puShoes > 0) { puShoes -= dt; if (puShoes <= 0) puShoes = 0; }
       updatePowerupUI();
 
-      // chasers
-      if (!dogActive && elapsed >= DOG_DELAY) {
-        dogActive = true; dogGap = 1; dogBarkTimer = 8;
+      // chasers — behind the player; appear at 15s, chase for 15s, then give up
+      if (!dogActive && elapsed >= DOG_DELAY && elapsed < DOG_DELAY + DOG_CHASE_DURATION) {
+        dogActive = true; dogGap = 1; dogBarkTimer = 6;
         chasersLayer.innerHTML = `<div class="chaser running" id="dog" style="width:96px;height:64px;">${SVG.dog}</div>
           <div class="chaser running" id="teacher" style="width:96px;height:150px;">${SVG.teacher}</div>`;
-        sfx.bark(); warn('🐕🧑‍🏫 Qeni e arsimtari po të ndjekin!');
+        sfx.bark(); warn('🐕🧑🏫 Qeni e arsimtari po të ndjekin!');
       }
       if (dogActive) {
-        dogGap -= 0.013 * dt;
-        dogBarkTimer -= dt;
-        if (dogBarkTimer <= 0) { dogBarkTimer = 8; dogGap += 0.32; sfx.bark(); }
-        const gn = Math.max(0, Math.min(1, dogGap));
-        const cy = groundY - 30 - gn * 110, cs = 0.55 + (1-gn) * 0.55;
-        const d = $('#dog'), t = $('#teacher');
-        if (d) { d.style.transform = `translate(${vx - spread*0.28}px,${cy}px) translate(-50%,-100%) scale(${cs})`; }
-        if (t) { t.style.transform = `translate(${vx + spread*0.28}px,${cy}px) translate(-50%,-100%) scale(${cs})`; }
-        if (dogGap <= 0.02) die('dog');
+        if (elapsed >= DOG_DELAY + DOG_CHASE_DURATION) {
+          dogActive = false; chasersLayer.innerHTML = '';
+          warn('✅ Shpëtove! Nuk të ndjekin më!');
+        } else {
+          dogGap -= 0.013 * dt;
+          dogBarkTimer -= dt;
+          if (dogBarkTimer <= 0) { dogBarkTimer = 6; dogGap += 0.32; sfx.bark(); }
+          const gn = Math.max(0, Math.min(1, dogGap));
+          const cy = groundY - 40 - gn * 140, cs = 0.5 + (1-gn) * 0.5;
+          const plx = laneX(lane);
+          const d = $('#dog'), t = $('#teacher');
+          if (d) { d.style.transform = `translate(${plx - 24}px,${cy}px) translate(-50%,-100%) scale(${cs})`; }
+          if (t) { t.style.transform = `translate(${plx + 24}px,${cy}px) translate(-50%,-100%) scale(${cs})`; }
+          if (dogGap <= 0.02) die('dog');
+        }
       }
 
       // jump physics
       if (!onGround) {
         vy -= GRAVITY * dt; jumpH += vy * dt;
-        if (jumpH <= 0) { jumpH = 0; vy = 0; onGround = true; playerEl.classList.remove('jump'); playerEl.classList.add('running'); }
+        if (jumpH <= 0) {
+          jumpH = 0; vy = 0; onGround = true;
+          playerEl.classList.remove('jump'); playerEl.classList.add('running');
+          dustPuff(laneX(lane), groundY - 8);
+          const svg = playerEl.querySelector('svg');
+          if (svg) { svg.classList.add('land'); setTimeout(()=>svg.classList.remove('land'), 300); }
+        }
       }
       playerEl.style.bottom = (46 + jumpH) + 'px';
 
@@ -652,15 +810,45 @@ gameArea.addEventListener('pointerup', e => {
 window.addEventListener('keydown', e => {
   if (S.screen !== 'game') return;
   const k = e.key;
+  if (k === 'p' || k === 'P' || k === 'Escape') { e.preventDefault(); if (S.paused) resumeGame(); else pauseGame(); return; }
   if (k === 'ArrowLeft' || k === 'a' || k === 'A') { e.preventDefault(); moveLane(-1); }
   else if (k === 'ArrowRight' || k === 'd' || k === 'D') { e.preventDefault(); moveLane(1); }
   else if (k === ' ' || k === 'ArrowUp' || k === 'w' || k === 'W') { e.preventDefault(); ensureAudio(); doJump(); }
 });
 window.addEventListener('resize', () => { computeLayout(); });
 
+/* ---------- pause ---------- */
+function pauseGame() {
+  if (S.screen !== 'game' || (S.phase !== 'playing' && S.phase !== 'countdown') || S.paused) return;
+  S.paused = true;
+  gameArea.classList.add('paused');
+  $('#pause-btn').classList.add('hidden');
+  $('#pause-overlay').classList.remove('hidden');
+}
+function resumeGame() {
+  if (!S.paused) return;
+  S.paused = false;
+  gameArea.classList.remove('paused');
+  $('#pause-btn').classList.remove('hidden');
+  $('#pause-overlay').classList.add('hidden');
+  lastTime = performance.now();
+}
+function pauseToMenu() {
+  S.paused = false;
+  gameArea.classList.remove('paused');
+  $('#pause-overlay').classList.add('hidden');
+  gameScreen.classList.add('hidden');
+  selectScreen.classList.remove('hidden');
+  buildMenu();
+  S = { screen:'select', phase:'idle' };
+}
+
 /* ---------- buttons ---------- */
 $('#play-again').addEventListener('click', () => { ensureAudio(); startGame(char); });
 $('#change-char').addEventListener('click', () => { ensureAudio(); overScreen.classList.add('hidden'); gameScreen.classList.add('hidden'); selectScreen.classList.remove('hidden'); buildMenu(); });
+$('#pause-btn').addEventListener('click', () => { ensureAudio(); pauseGame(); });
+$('#resume-btn').addEventListener('click', () => { ensureAudio(); resumeGame(); });
+$('#pause-menu-btn').addEventListener('click', () => { ensureAudio(); pauseToMenu(); });
 
 /* ---------- init ---------- */
 buildMenu();
