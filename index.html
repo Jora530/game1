@@ -3,61 +3,122 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>School Rush — Vrapo në Korridor</title>
+<title>School Rush — 30 Nivele</title>
 <style>
   :root {
-    --olive: #5a7818;
-    --wall: #b8cbe0;
+    --olive: #2f9e44;
+    --accent: #3b82f6;
+    --bg-deep: #05070f;
+    --bg: #0a0f1e;
+    --panel: rgba(17,24,42,0.92);
+    --text: #e2e8f0;
+    --muted: #94a3b8;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { height: 100%; overflow: hidden; }
-  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; user-select: none; -webkit-user-select: none; touch-action: none; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; user-select: none; -webkit-user-select: none; touch-action: none; background:#05070f; }
   .screen { position: fixed; inset: 0; }
   .hidden { display: none !important; }
 
   /* ============ MENU ============ */
-  #select-screen { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:18px; overflow-y:auto;
-    background: radial-gradient(circle at 50% 10%, #1b2340 0%, #0b1120 55%, #060a14 100%); }
-  .coins-badge { position:absolute; top:16px; right:20px; z-index:5; display:flex; align-items:center; gap:7px;
-    background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.18); border-radius:40px; padding:9px 18px; font-weight:900; font-size:18px; color:#fbbf24;
-    box-shadow:0 6px 16px rgba(0,0,0,0.35); }
-  .title { font-size: clamp(40px, 7.5vw, 76px); font-weight:900; letter-spacing:1px; color:#fff; text-align:center; line-height:1;
+  #select-screen { display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:12px; padding:18px; overflow-y:auto;
+    background: radial-gradient(circle at 50% 0%, #121a30 0%, #0a0f1e 55%, #05070f 100%); }
+  .top-badges { position:sticky; top:0; z-index:6; width:100%; display:flex; justify-content:space-between; align-items:center; gap:10px; padding:6px 2px; }
+  .badge { display:flex; align-items:center; gap:7px; background:var(--panel); border:1px solid rgba(255,255,255,0.14); border-radius:40px;
+    padding:9px 16px; font-weight:900; font-size:16px; color:#fbbf24; box-shadow:0 6px 16px rgba(0,0,0,0.5); }
+  .badge.planes { color:#93c5fd; }
+  .title { font-size: clamp(34px, 6.5vw, 64px); font-weight:900; letter-spacing:1px; color:#fff; text-align:center; line-height:1; margin-top:2px;
     text-shadow: 0 0 6px #fff, 0 0 14px #3b82f6, 0 0 30px #3b82f6, 0 0 50px #ec4899, 0 0 80px #ec4899; }
   .title span { color:#fff; text-shadow: 0 0 6px #fff, 0 0 14px #ec4899, 0 0 30px #ec4899, 0 0 50px #3b82f6, 0 0 80px #3b82f6; }
-  .subtitle { color:#cbd5e1; font-size: clamp(14px, 2.2vw, 19px); font-weight:600; text-align:center; max-width:680px; line-height:1.4; }
-  .sec-title { font-size:20px; font-weight:900; color:#e2e8f0; margin-top:6px; }
-  .best-badge { color:#cbd5e1; font-weight:700; }
-  .char-cards, .shop-cards { display:flex; flex-wrap:wrap; gap:16px; justify-content:center; align-items:stretch; }
+  .subtitle { color:var(--muted); font-size: clamp(13px, 2vw, 17px); font-weight:600; text-align:center; max-width:720px; line-height:1.4; }
+  .sec-title { font-size:18px; font-weight:900; color:var(--text); margin-top:4px; }
 
-  .char-card { width:190px; padding:16px 12px 14px; border-radius:22px; background:rgba(22,28,44,0.86); cursor:pointer; text-align:center;
-    border:1px solid rgba(255,255,255,0.10); box-shadow: 0 12px 28px rgba(0,0,0,0.45); transition: transform .16s ease, box-shadow .16s ease;
-    display:flex; flex-direction:column; align-items:center; gap:7px; }
-  .char-card:hover { transform: translateY(-8px) scale(1.04); box-shadow: 0 22px 44px rgba(0,0,0,0.6), 0 0 24px rgba(59,130,246,0.25); }
-  .char-card.locked { filter: grayscale(0.7) brightness(0.96); }
+  .guide-row { display:flex; align-items:center; gap:12px; background:var(--panel); border:1px solid rgba(255,255,255,0.14); border-radius:24px;
+    padding:10px 18px; cursor:pointer; max-width:520px; transition: transform .15s ease, box-shadow .15s ease; }
+  .guide-row:hover { transform: translateY(-3px); box-shadow: 0 16px 36px rgba(0,0,0,0.6), 0 0 22px rgba(96,165,250,0.3); }
+  .guide-row img { width:70px; height:70px; object-fit:contain; filter: drop-shadow(0 0 12px rgba(96,165,250,0.6)); }
+  .guide-row .g-txt { text-align:left; }
+  .guide-row .g-txt b { color:#bfdbfe; font-size:15px; display:block; }
+  .guide-row .g-txt span { color:var(--muted); font-size:12.5px; }
+
+  .char-cards { display:flex; flex-wrap:wrap; gap:14px; justify-content:center; align-items:stretch; }
+  .char-card { width:170px; padding:14px 10px 12px; border-radius:20px; background:var(--panel); cursor:pointer; text-align:center;
+    border:2px solid rgba(255,255,255,0.10); box-shadow: 0 12px 28px rgba(0,0,0,0.5); transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+    display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .char-card:hover { transform: translateY(-6px) scale(1.03); box-shadow: 0 20px 40px rgba(0,0,0,0.65), 0 0 22px rgba(59,130,246,0.25); }
+  .char-card.selected { border-color: #fbbf24; box-shadow: 0 0 0 2px #fbbf24, 0 20px 40px rgba(0,0,0,0.65); }
+  .char-card.locked { filter: grayscale(0.8) brightness(0.85); }
   .char-circle { width:86px; height:86px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-    border:5px solid #fff; box-shadow: inset 0 -6px 12px rgba(0,0,0,0.18), 0 8px 18px rgba(0,0,0,0.3); }
-  .char-circle svg { width:62px; height:95px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.95)) drop-shadow(0 0 14px rgba(255,255,255,0.65)) drop-shadow(0 0 26px rgba(255,255,255,0.4)); }
-  .char-name { font-size:20px; font-weight:800; color:#f1f5f9; }
-  .char-desc { font-size:11px; color:#94a3b8; line-height:1.3; min-height:42px; }
-  .char-pick, .char-buy { padding:9px 16px; border-radius:40px; font-weight:800; font-size:14px; color:#fff; border:none; cursor:pointer;
-    box-shadow:0 4px 0 rgba(0,0,0,0.3); transition: filter .15s ease; width:100%; }
-  .char-pick:hover, .char-buy:hover { filter: brightness(1.1); }
-  .char-buy { background:#b8860b; }
-  .char-buy:disabled { background:#475569; cursor:not-allowed; box-shadow:0 4px 0 #334155; }
-  .char-price { font-size:16px; font-weight:900; color:#fbbf24; }
+    border:4px solid #fff; box-shadow: inset 0 -6px 12px rgba(0,0,0,0.3), 0 8px 18px rgba(0,0,0,0.4); overflow:hidden; }
+  .char-circle svg { width:64px; height:96px; filter: drop-shadow(0 0 6px rgba(255,255,255,0.55)) drop-shadow(0 0 14px rgba(255,255,255,0.3)); animation: idleBob 2.2s ease-in-out infinite; }
+  @keyframes idleBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+  .char-name { font-size:17px; font-weight:800; color:#f1f5f9; }
+  .char-desc { font-size:10px; color:var(--muted); line-height:1.25; min-height:26px; }
+  .char-buy { padding:8px 12px; border-radius:40px; font-weight:800; font-size:13px; color:#fff; border:none; cursor:pointer;
+    background:#1d4ed8; box-shadow:0 4px 0 #1e3a8a; width:100%; }
+  .char-buy.coins { background:#b8860b; box-shadow:0 4px 0 #8a5a0a; }
+  .char-buy:disabled { background:#334155; cursor:not-allowed; box-shadow:0 4px 0 #1e293b; }
+  .char-price { font-size:14px; font-weight:900; }
+  .char-price.planes { color:#93c5fd; }
+  .char-price.coins { color:#fbbf24; }
+  .char-pick { padding:8px 12px; border-radius:40px; font-weight:800; font-size:13px; color:#fff; border:none; cursor:pointer;
+    background:#2f9e44; box-shadow:0 4px 0 #1b5e2a; width:100%; }
+
+  .levels-wrap { display:flex; flex-direction:column; align-items:center; gap:8px; }
+  .level-grid { display:grid; grid-template-columns:repeat(6, 1fr); gap:9px; }
+  @media (max-width:600px){ .level-grid { grid-template-columns:repeat(5, 1fr); } }
+  .lvl { width:52px; height:52px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px;
+    color:#fff; background:#1f2937; border:2px solid rgba(255,255,255,0.14); cursor:pointer; transition: transform .12s ease, background .12s ease; position:relative; }
+  .lvl:hover { transform: scale(1.08); }
+  .lvl.selected { background:#f59e0b; border-color:#fff; color:#111; box-shadow:0 0 14px rgba(245,158,11,0.6); }
+  .lvl.done { background:#2f9e44; }
+  .lvl.locked { opacity:0.35; cursor:not-allowed; }
+  .lvl .lock-ico { position:absolute; font-size:16px; }
+
+  .mode-toggle { display:flex; gap:10px; margin-top:4px; }
+  .mode-btn { padding:12px 22px; border-radius:40px; font-weight:900; font-size:15px; color:#cbd5e1; background:#1e293b;
+    border:2px solid rgba(255,255,255,0.14); cursor:pointer; transition: all .14s ease; }
+  .mode-btn.active { background:linear-gradient(135deg,#f59e0b,#f97316); color:#111; border-color:#fff; box-shadow:0 0 16px rgba(245,158,11,0.5); }
+  .mode-btn:hover { transform: translateY(-2px); }
+
+  #play-btn { margin:6px 0 20px; padding:15px 54px; border:none; border-radius:50px; font-size:22px; font-weight:900; color:#fff;
+    background:linear-gradient(135deg,#2f9e44,#16a34a); box-shadow:0 6px 0 #14532d, 0 14px 34px rgba(34,197,94,0.35); cursor:pointer;
+    transition: transform .12s ease, filter .12s ease; }
+  #play-btn:hover { transform: translateY(-2px) scale(1.03); filter: brightness(1.08); }
+  #play-btn:active { transform: translateY(2px); box-shadow:0 2px 0 #14532d; }
+
+  /* ============ GUIDE MODAL ============ */
+  #guide-overlay { position:fixed; inset:0; z-index:70; display:flex; align-items:center; justify-content:center; padding:20px;
+    background:rgba(5,8,16,0.82); backdrop-filter:blur(5px); }
+  .guide-card { background:#111827; border:1px solid rgba(255,255,255,0.16); border-radius:28px; padding:26px 30px; text-align:center;
+    max-width:480px; width:100%; box-shadow:0 30px 70px rgba(0,0,0,0.7); animation: cardIn .35s cubic-bezier(.2,1.2,.3,1); }
+  .guide-card img { width:130px; height:130px; object-fit:contain; filter: drop-shadow(0 0 18px rgba(96,165,250,0.7)); }
+  .guide-card h2 { font-size:26px; font-weight:900; color:#e2e8f0; margin:4px 0 10px; }
+  .guide-card ul { list-style:none; text-align:left; display:flex; flex-direction:column; gap:8px; margin:0 auto 16px; max-width:360px; }
+  .guide-card li { color:#cbd5e1; font-size:14px; font-weight:600; line-height:1.35; }
+  .guide-card li b { color:#fbbf24; }
+  .guide-card button { padding:12px 40px; border:none; border-radius:40px; font-size:17px; font-weight:900; color:#fff;
+    background:var(--olive); box-shadow:0 5px 0 #14532d; cursor:pointer; }
+  .guide-card button:hover { filter: brightness(1.1); }
 
   /* ============ GAME ============ */
-  #game-screen { background:#b8cbe0; overflow:hidden; }
-  #hud { position:absolute; top:0; left:0; right:0; z-index:30; display:flex; align-items:center; justify-content:center; gap:11px; padding:10px 12px; }
-  .hud-item { background:rgba(255,255,255,0.93); border-radius:30px; padding:7px 16px; font-size:17px; font-weight:800; color:#1e3a5f;
-    box-shadow:0 6px 16px rgba(0,0,0,0.14); display:flex; align-items:center; gap:6px; white-space:nowrap; }
-  .hud-item.score span { color: var(--olive); }
-  .hud-item.coins { color:#b8860b; }
+  #game-screen { background:#070a14; overflow:hidden; }
+  #hud { position:absolute; top:0; left:0; right:0; z-index:30; display:flex; align-items:center; justify-content:center; gap:8px; padding:9px 12px; flex-wrap:wrap; }
+  .hud-item { background:rgba(15,20,35,0.88); border:1px solid rgba(255,255,255,0.12); border-radius:30px; padding:6px 13px; font-size:15px; font-weight:800;
+    color:#e2e8f0; box-shadow:0 6px 16px rgba(0,0,0,0.5); display:flex; align-items:center; gap:5px; white-space:nowrap; }
+  .hud-item.score span { color:#facc15; }
+  .hud-item.coins { color:#fbbf24; }
+  .hud-item.planes { color:#93c5fd; }
+  .hud-item.level { color:#f472b6; }
+  .hud-item.race { color:#4ade80; }
 
-  #powerup-bar { position:absolute; top:62px; left:50%; transform:translateX(-50%); z-index:30; display:flex; gap:10px; }
-  .pu-chip { display:flex; align-items:center; gap:6px; background:rgba(255,255,255,0.93); border-radius:30px; padding:6px 12px;
-    font-weight:800; font-size:14px; box-shadow:0 4px 12px rgba(0,0,0,0.14); }
-  .pu-chip .bar { width:70px; height:8px; background:#e2e8f0; border-radius:6px; overflow:hidden; }
+  #progress-wrap { position:absolute; top:54px; left:0; right:0; z-index:29; height:9px; background:rgba(15,20,35,0.7); border-bottom:1px solid rgba(255,255,255,0.08); }
+  #progress-fill { height:100%; width:0%; background:linear-gradient(90deg,#22c55e,#a3e635); box-shadow:0 0 10px rgba(163,230,53,0.6); transition: width .1s linear; }
+
+  #powerup-bar { position:absolute; top:72px; left:50%; transform:translateX(-50%); z-index:30; display:flex; gap:8px; }
+  .pu-chip { display:flex; align-items:center; gap:6px; background:rgba(15,20,35,0.88); border:1px solid rgba(255,255,255,0.12); border-radius:30px; padding:5px 11px;
+    font-weight:800; font-size:13px; color:#e2e8f0; box-shadow:0 4px 12px rgba(0,0,0,0.5); }
+  .pu-chip .bar { width:60px; height:7px; background:#1e293b; border-radius:6px; overflow:hidden; }
   .pu-chip .bar i { display:block; height:100%; border-radius:6px; }
   .pu-chip.star .bar i { background:#f59e0b; }
   .pu-chip.shoes .bar i { background:#3b82f6; }
@@ -65,117 +126,149 @@
 
   #game-area { position:absolute; inset:0; overflow:hidden; cursor:pointer; }
 
-  /* ---- side-scroll corridor background ---- */
+  /* ---- dark side-scroll corridor ---- */
   .ceiling { position:absolute; top:0; left:0; right:0; height:18%; z-index:0;
-    background: linear-gradient(180deg,#eef3f8,#d8e2ec); }
-  .ceiling .lights { position:absolute; left:0; right:0; top:32%; height:36%;
-    background: repeating-linear-gradient(90deg, #fff 0 90px, #e8eef5 90px 180px);
-    box-shadow:0 0 20px rgba(255,255,255,0.8); opacity:0.9; animation: scrollXLights 1.2s linear infinite; }
-  @keyframes scrollXLights { from { background-position-x: 0; } to { background-position-x: 180px; } }
+    background: linear-gradient(180deg,#0b0f1c,#0f1524); }
+  .ceiling .lights { position:absolute; left:0; right:0; top:30%; height:38%;
+    background: repeating-linear-gradient(90deg, rgba(255,255,255,0.75) 0 78px, rgba(20,26,42,1) 78px 176px);
+    filter: blur(1px); opacity:0.5; animation: scrollXLights 1.4s linear infinite; }
+  @keyframes scrollXLights { from { background-position-x: 0; } to { background-position-x: 176px; } }
 
   .wall { position:absolute; top:18%; left:0; right:0; bottom:96px; z-index:0; overflow:hidden;
-    background: linear-gradient(180deg,#a9c0da,#9cb5d2); }
+    background: linear-gradient(180deg,#141a2b,#101625); }
   .wall .lockers { position:absolute; inset:0;
-    background: repeating-linear-gradient(90deg, #7d9cc4 0 52px, #6b8ab2 52px 55px, #7d9cc4 55px 107px),
-                repeating-linear-gradient(0deg, transparent 0 54px, rgba(0,0,0,0.16) 54px 57px), #7d9cc4;
-    box-shadow: inset 0 0 30px rgba(0,0,0,0.18); animation: scrollXLockers 0.7s linear infinite; }
-  @keyframes scrollXLockers { from { background-position-x: 0; } to { background-position-x: 107px; } }
-  .wall .window { position:absolute; top:12%; width:80px; height:64px; background:#bfe3ff; border-radius:6px; box-shadow: inset 0 0 0 5px #7a94ad; z-index:1; }
+    background: repeating-linear-gradient(90deg, #232c40 0 50px, #1a2132 50px 53px, #232c40 53px 105px),
+                repeating-linear-gradient(0deg, transparent 0 52px, rgba(0,0,0,0.4) 52px 55px), #232c40;
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.55); animation: scrollXLockers 0.8s linear infinite; }
+  @keyframes scrollXLockers { from { background-position-x: 0; } to { background-position-x: 105px; } }
+  .wall .window { position:absolute; top:12%; width:80px; height:64px; background:linear-gradient(180deg,#0c1830,#16264a); border-radius:6px;
+    box-shadow: inset 0 0 0 5px #0a0f1c, inset 0 0 16px rgba(96,165,250,0.25); z-index:1; }
+  .wall .window::after { content:''; position:absolute; top:10px; right:12px; width:16px; height:16px; border-radius:50%;
+    background:#e2e8f0; box-shadow:-6px 5px 0 -4px #cbd5e1; opacity:0.85; }
 
   .floor { position:absolute; left:0; right:0; bottom:0; height:96px; z-index:0;
-    background: repeating-linear-gradient(90deg, transparent 0 70px, rgba(0,0,0,0.08) 70px 72px),
-                repeating-linear-gradient(0deg, transparent 0 44px, rgba(0,0,0,0.12) 44px 46px), #d8c7a4;
-    animation: scrollXFloor 0.5s linear infinite; }
+    background: repeating-linear-gradient(90deg, transparent 0 70px, rgba(255,255,255,0.05) 70px 72px),
+                repeating-linear-gradient(0deg, transparent 0 44px, rgba(0,0,0,0.45) 44px 46px), #0d1117;
+    animation: scrollXFloor 0.55s linear infinite; }
   @keyframes scrollXFloor { from { background-position-x: 0; } to { background-position-x: 72px; } }
+  .floor::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background:linear-gradient(90deg, var(--accent), transparent 40%); opacity:0.5; }
 
   /* ---- player / objects ---- */
-  #player { position:absolute; z-index:20; width:150px; height:204px; pointer-events:none; will-change: transform; }
-  #player svg { width:100%; height:100%; filter: drop-shadow(0 6px 8px rgba(0,0,0,0.28)); }
-  #player .leg, #player .arm { transform-box: fill-box; transform-origin: 50% 8%; }
-  #player.running { animation: playerBob .32s ease-in-out infinite; }
-  #player.running .legL { animation: runLeg .32s ease-in-out infinite; }
-  #player.running .legR { animation: runLeg .32s ease-in-out infinite; animation-delay: .16s; }
-  #player.running .armL { animation: swingArm .32s ease-in-out infinite; animation-delay: .16s; }
-  #player.running .armR { animation: swingArm .32s ease-in-out infinite; }
-  #player.jump .legL, #player.jump .legR { animation: none; }
-  #player.dead { filter: grayscale(1) brightness(0.7); }
-  @keyframes playerBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
-  @keyframes runLeg { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-13px) rotate(9deg); } }
-  @keyframes swingArm { 0%,100% { transform: rotate(-12deg); } 50% { transform: rotate(14deg); } }
+  #player { position:absolute; z-index:20; width:200px; height:272px; pointer-events:none; will-change: transform; }
+  #player svg { width:100%; height:100%; filter: drop-shadow(0 8px 10px rgba(0,0,0,0.5)) drop-shadow(0 0 10px rgba(255,255,255,0.15)); }
+  #player .leg, #player .arm { transform-box: fill-box; transform-origin: 50% 8%; transition: transform .12s ease; }
+  #player.running svg { animation: runBob .34s ease-in-out infinite; }
+  #player.running .legL { animation: runLegL .34s ease-in-out infinite; }
+  #player.running .legR { animation: runLegR .34s ease-in-out infinite; animation-delay: .17s; }
+  #player.running .armL { animation: runArmL .34s ease-in-out infinite; }
+  #player.running .armR { animation: runArmR .34s ease-in-out infinite; animation-delay: .17s; }
+  #player.jump .legL { transform: rotate(-46deg); }
+  #player.jump .legR { transform: rotate(38deg); }
+  #player.jump .armL { transform: rotate(-62deg); }
+  #player.jump .armR { transform: rotate(58deg); }
+  #player.dead { filter: grayscale(1) brightness(0.6); }
+  #player.dbljump svg { animation: flip .5s ease; }
+  #player.hurt svg { animation: hurtFlash .35s ease; }
+  @keyframes hurtFlash { 0%,100% { filter: drop-shadow(0 8px 10px rgba(0,0,0,0.5)); } 50% { filter: drop-shadow(0 0 18px rgba(255,60,40,0.95)) brightness(1.35); } }
+  @keyframes flip { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+  @keyframes runBob { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-6px) rotate(1.5deg); } }
+  @keyframes runLegL { 0%,100% { transform: rotate(-30deg); } 50% { transform: rotate(26deg); } }
+  @keyframes runLegR { 0%,100% { transform: rotate(26deg); } 50% { transform: rotate(-30deg); } }
+  @keyframes runArmL { 0%,100% { transform: rotate(24deg); } 50% { transform: rotate(-32deg); } }
+  @keyframes runArmR { 0%,100% { transform: rotate(-32deg); } 50% { transform: rotate(24deg); } }
+
+  #player-shadow { position:absolute; z-index:19; width:120px; height:22px; border-radius:50%;
+    background: radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.55), rgba(0,0,0,0) 70%); pointer-events:none; will-change: transform, opacity; }
 
   .chaser { position:absolute; z-index:15; pointer-events:none; will-change: transform; }
-  .chaser svg { width:100%; height:100%; filter: drop-shadow(0 4px 5px rgba(0,0,0,0.25)); }
+  .chaser svg { width:100%; height:100%; filter: drop-shadow(0 4px 5px rgba(0,0,0,0.4)); }
   .chaser.running { animation: chaserBob .26s ease-in-out infinite; }
   @keyframes chaserBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
 
+  .racer { position:absolute; z-index:16; pointer-events:none; will-change: transform, left; }
+  .racer svg { width:100%; height:100%; filter: drop-shadow(0 4px 5px rgba(0,0,0,0.4)); }
+  .racer.running { animation: chaserBob .26s ease-in-out infinite; }
+  .racer.guide img { width:100%; height:100%; object-fit:contain; filter: drop-shadow(0 0 10px rgba(96,165,250,0.65)); }
+
   .obj { position:absolute; z-index:10; pointer-events:none; will-change: transform, opacity; }
   .obj svg { width:100%; height:100%; }
-  .coin { filter: drop-shadow(0 2px 3px rgba(0,0,0,0.18)); }
+  .coin { filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3)); }
   .coin .c-spin { animation: coinSpin 1.2s linear infinite; transform-box: fill-box; transform-origin: center; }
+  .coin svg { animation: coinBob 1.6s ease-in-out infinite; }
+  @keyframes coinBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
   @keyframes coinSpin { 0%,100% { transform: scaleX(1); } 50% { transform: scaleX(0.25); } }
 
-  .plane { filter: drop-shadow(0 0 6px #ffd400); animation: planeGlow 1s ease-in-out infinite; }
-  @keyframes planeGlow { 0%,100% { filter: drop-shadow(0 0 4px #ffd400); } 50% { filter: drop-shadow(0 0 14px #fff0a0) drop-shadow(0 0 24px #ffd400); } }
+  .plane { filter: drop-shadow(0 0 6px #ffd400); }
+  .plane svg { animation: planeGlow 1s ease-in-out infinite; }
+  @keyframes planeGlow { 0%,100% { filter: drop-shadow(0 0 4px #ffd400); transform: translateY(0); } 50% { filter: drop-shadow(0 0 14px #fff0a0) drop-shadow(0 0 24px #ffd400); transform: translateY(-8px); } }
   .spark { position:absolute; width:7px; height:7px; border-radius:50%; background:#fff; animation: sparkle 0.8s ease-in-out infinite; }
   .spark.s1 { top:-4px; left:10%; } .spark.s2 { top:30%; right:-4px; animation-delay:.25s; } .spark.s3 { bottom:-3px; left:45%; animation-delay:.5s; }
   @keyframes sparkle { 0%,100% { transform: scale(0.3); opacity:0.3; } 50% { transform: scale(1.3); opacity:1; } }
   .star, .shoes { animation: itemBob 0.9s ease-in-out infinite; }
-  @keyframes itemBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  @keyframes itemBob { 0%,100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-9px) rotate(5deg); } }
 
-  .obj.rock, .obj.cone, .obj.box { animation: dangerPulse 0.9s ease-in-out infinite; }
+  .obj.rock, .obj.cone, .obj.box, .obj.tallBox, .obj.barrier, .obj.trash, .obj.ball, .obj.books, .obj.desk, .obj.spikes { animation: dangerPulse 0.9s ease-in-out infinite; }
   @keyframes dangerPulse {
-    0%,100% { filter: drop-shadow(0 0 3px rgba(255,50,20,0.55)); }
-    50% { filter: drop-shadow(0 0 11px rgba(255,40,10,0.95)) drop-shadow(0 0 22px rgba(255,60,20,0.5)); }
+    0%,100% { filter: drop-shadow(0 0 3px rgba(255,70,30,0.5)); }
+    50% { filter: drop-shadow(0 0 11px rgba(255,50,10,0.9)) drop-shadow(0 0 22px rgba(255,60,20,0.5)); }
   }
+  .obj.rock svg { animation: rockRock 1.8s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes rockRock { 0%,100% { transform: rotate(-6deg); } 50% { transform: rotate(6deg); } }
+  .obj.cone svg { animation: coneWobble 1.4s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+  @keyframes coneWobble { 0%,100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
+  .obj.ball svg { animation: ballSpin 0.9s linear infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes ballSpin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+  .obj.books svg { animation: booksFloat 1.7s ease-in-out infinite; }
+  @keyframes booksFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 
   .particle { position:absolute; z-index:25; border-radius:50%; pointer-events:none; animation: pFly .6s ease-out forwards; }
   @keyframes pFly { 0% { opacity:1; transform: translate(-50%,-50%) scale(.7); }
     100% { opacity:0; transform: translate(calc(-50% + var(--px)), calc(-50% + var(--py))) scale(.1); } }
   .float-txt { position:absolute; z-index:25; font-weight:900; font-size:26px; pointer-events:none;
-    text-shadow:0 3px 0 rgba(0,0,0,0.25); animation: floatUp .8s ease-out forwards; }
+    text-shadow:0 3px 0 rgba(0,0,0,0.3); animation: floatUp .8s ease-out forwards; }
   @keyframes floatUp { 0% { opacity:1; transform: translate(-50%,0) scale(.7); } 100% { opacity:0; transform: translate(-50%,-70px) scale(1.4); } }
 
   #countdown { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:40;
     font-size:clamp(90px,24vw,220px); font-weight:900; color:#fff; pointer-events:none;
-    text-shadow:0 6px 0 #2b6cb0, 0 12px 30px rgba(0,0,0,0.3); animation: countPop .9s ease; }
+    text-shadow:0 6px 0 #1e40af, 0 12px 30px rgba(0,0,0,0.5); animation: countPop .9s ease; }
   @keyframes countPop { 0% { transform:scale(2.2); opacity:0; } 30% { transform:scale(1); opacity:1; } 100% { transform:scale(.85); opacity:.85; } }
   #go-flash { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:40;
     font-size:clamp(80px,20vw,190px); font-weight:900; color:#ffd400; pointer-events:none;
-    text-shadow:0 6px 0 #b45309, 0 14px 34px rgba(0,0,0,0.35); animation: goFlash .8s ease forwards; }
+    text-shadow:0 6px 0 #92400e, 0 14px 34px rgba(0,0,0,0.5); animation: goFlash .8s ease forwards; }
   @keyframes goFlash { 0% { transform:scale(.4); opacity:0; } 25% { transform:scale(1.15); opacity:1; } 100% { transform:scale(1.6); opacity:0; } }
   .warn { position:absolute; top:26%; left:50%; transform:translateX(-50%); z-index:35; pointer-events:none;
-    background:rgba(0,0,0,0.7); color:#fff; font-weight:900; font-size:21px; padding:12px 26px; border-radius:40px;
-    animation: warnPop 1.8s ease forwards; }
+    background:rgba(0,0,0,0.75); color:#fff; font-weight:900; font-size:20px; padding:12px 26px; border-radius:40px;
+    border:1px solid rgba(255,255,255,0.2); animation: warnPop 1.8s ease forwards; }
   @keyframes warnPop { 0% { opacity:0; transform:translateX(-50%) scale(.5); } 18% { opacity:1; transform:translateX(-50%) scale(1.08); }
     80% { opacity:1; } 100% { opacity:0; transform:translateX(-50%) scale(1); } }
   .controls-hint { position:absolute; bottom:12px; left:50%; transform:translateX(-50%); z-index:28; pointer-events:none;
-    color:#fff; font-weight:800; font-size:14px; background:rgba(0,0,0,0.4); padding:7px 16px; border-radius:30px; }
+    color:#fff; font-weight:800; font-size:13px; background:rgba(0,0,0,0.5); padding:7px 16px; border-radius:30px; }
 
   /* ---- pause ---- */
   #pause-btn { position:absolute; top:12px; right:14px; z-index:31; width:46px; height:46px; border-radius:50%;
-    background:rgba(255,255,255,0.92); border:none; font-size:20px; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.2);
-    transition: transform .12s ease; }
+    background:rgba(15,20,35,0.9); border:1px solid rgba(255,255,255,0.2); color:#fff; font-size:20px; cursor:pointer;
+    box-shadow:0 4px 12px rgba(0,0,0,0.4); transition: transform .12s ease; }
   #pause-btn:hover { transform: scale(1.08); }
   #pause-overlay { position:absolute; inset:0; z-index:45; display:flex; align-items:center; justify-content:center;
-    background:rgba(15,30,50,0.62); backdrop-filter:blur(3px); }
-  .pause-card { background:#fff; border-radius:26px; padding:28px 36px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.4);
-    animation: cardIn .3s cubic-bezier(.2,1.2,.3,1); }
-  .pause-card h2 { font-size:32px; font-weight:900; color:#1e3a5f; margin-bottom:16px; }
+    background:rgba(5,8,16,0.75); backdrop-filter:blur(4px); }
+  .pause-card { background:#111827; border:1px solid rgba(255,255,255,0.14); border-radius:26px; padding:28px 36px; text-align:center;
+    box-shadow:0 20px 50px rgba(0,0,0,0.6); animation: cardIn .3s cubic-bezier(.2,1.2,.3,1); }
+  .pause-card h2 { font-size:32px; font-weight:900; color:#e2e8f0; margin-bottom:16px; }
   .pause-card button { display:block; width:100%; margin:9px 0; padding:13px; border:none; border-radius:40px; font-size:17px; font-weight:800; cursor:pointer; }
-  #resume-btn { background:var(--olive); color:#fff; box-shadow:0 5px 0 #3d5514; }
-  #pause-menu-btn { background:#e2e8f0; color:#1e3a5f; box-shadow:0 5px 0 #cbd5e1; }
+  #resume-btn { background:var(--olive); color:#fff; box-shadow:0 5px 0 #14532d; }
+  #pause-menu-btn { background:#1e293b; color:#e2e8f0; box-shadow:0 5px 0 #0f172a; }
   #game-area.paused * { animation-play-state: paused !important; }
 
-  /* ---- advanced background & juice ---- */
+  /* ---- effects ---- */
   .vignette { position:absolute; inset:0; z-index:3; pointer-events:none;
-    background: radial-gradient(ellipse at 50% 42%, transparent 52%, rgba(20,35,60,0.30) 100%); }
+    background: radial-gradient(ellipse at 50% 42%, transparent 52%, rgba(0,0,0,0.55) 100%); }
 
-  .dust { position:absolute; z-index:4; border-radius:50%; background:rgba(255,255,255,0.6);
-    pointer-events:none; box-shadow:0 0 6px rgba(255,255,255,0.5); animation: dustFloat linear infinite; }
+  .dust { position:absolute; z-index:4; border-radius:50%; background:rgba(150,170,200,0.35);
+    pointer-events:none; box-shadow:0 0 6px rgba(150,170,200,0.3); animation: dustFloat linear infinite; }
   @keyframes dustFloat {
     0% { transform: translateY(0) translateX(0); opacity:0; }
-    12% { opacity:0.7; }
-    85% { opacity:0.45; }
+    12% { opacity:0.6; }
+    85% { opacity:0.35; }
     100% { transform: translateY(-52vh) translateX(24px); opacity:0; }
   }
 
@@ -202,63 +295,103 @@
     100% { transform: translate(-50%,-50%) scale(1.9); opacity:0; } }
 
   .streak { position:absolute; z-index:5; pointer-events:none; height:2px; border-radius:2px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.75), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
     animation: streakFly 0.6s linear forwards; }
   @keyframes streakFly { from { transform: translateX(-220px); opacity:0; } 15% { opacity:0.9; }
     to { transform: translateX(112vw); opacity:0; } }
 
-  #milestone { position:absolute; top:30%; left:50%; transform:translateX(-50%); z-index:36; pointer-events:none;
-    font-weight:900; font-size:36px; color:#ffd400; text-shadow:0 3px 0 #b45309, 0 10px 24px rgba(0,0,0,0.45);
-    animation: milestonePop 1.2s ease forwards; }
-  @keyframes milestonePop {
-    0% { transform:translateX(-50%) scale(0.3); opacity:0; }
-    25% { transform:translateX(-50%) scale(1.25); opacity:1; }
-    70% { transform:translateX(-50%) scale(1); opacity:1; }
-    100% { transform:translateX(-50%) scale(0.9); opacity:0; }
-  }
-
-  /* ============ OVER ============ */
-  #over-screen { display:flex; align-items:center; justify-content:center; padding:20px; background:rgba(15,30,50,0.55); backdrop-filter:blur(4px); z-index:50; }
-  .over-card { background:#fff; border-radius:30px; padding:28px 34px; text-align:center; box-shadow:0 30px 70px rgba(0,0,0,0.4);
-    max-width:430px; width:100%; animation: cardIn .4s cubic-bezier(.2,1.2,.3,1); }
+  /* ============ OVER / COMPLETE ============ */
+  #over-screen, #complete-screen { display:flex; align-items:center; justify-content:center; padding:20px; z-index:50; }
+  #over-screen { background:rgba(5,8,16,0.7); backdrop-filter:blur(4px); }
+  #complete-screen { background:rgba(5,8,16,0.78); backdrop-filter:blur(5px); }
+  .over-card, .complete-card { background:#111827; border:1px solid rgba(255,255,255,0.14); border-radius:30px; padding:28px 34px; text-align:center;
+    box-shadow:0 30px 70px rgba(0,0,0,0.7); max-width:440px; width:100%; animation: cardIn .4s cubic-bezier(.2,1.2,.3,1); }
   @keyframes cardIn { from { transform:scale(.6); opacity:0; } to { transform:scale(1); opacity:1; } }
-  .over-card h2 { font-size:26px; font-weight:900; color:#1e3a5f; }
-  .stats { display:flex; justify-content:center; gap:14px; margin:16px 0 6px; }
-  .stat { background:#f1f5f9; border-radius:16px; padding:12px 14px; min-width:84px; }
-  .stat .v { font-size:26px; font-weight:900; color:var(--olive); }
-  .stat.coins .v { color:#b8860b; }
-  .stat .k { font-size:11px; color:#64748b; font-weight:700; margin-top:2px; }
-  .final-best { color:#245a8a; font-weight:800; margin:10px 0 16px; }
-  .final-best.new { color:#e11d48; animation: blink .7s ease-in-out infinite; }
-  @keyframes blink { 0%,100% { transform:scale(1); } 50% { transform:scale(1.12); } }
-  .over-card button { display:block; width:100%; margin:8px 0; padding:13px; border:none; border-radius:40px; font-size:16px; font-weight:800;
+  .over-card h2 { font-size:30px; font-weight:900; color:#f87171; }
+  .complete-card h2 { font-size:30px; font-weight:900; color:#4ade80; }
+  .sub-note { color:var(--muted); font-weight:700; font-size:14px; margin-top:4px; }
+  .complete-card .big-reward { font-size:22px; font-weight:900; color:#fbbf24; margin:10px 0; }
+  .stats { display:flex; justify-content:center; gap:14px; margin:16px 0 6px; flex-wrap:wrap; }
+  .stat { background:#1e293b; border-radius:16px; padding:12px 14px; min-width:84px; }
+  .stat .v { font-size:26px; font-weight:900; color:#4ade80; }
+  .stat.coins .v { color:#fbbf24; }
+  .stat.planes .v { color:#93c5fd; }
+  .stat .k { font-size:11px; color:#94a3b8; font-weight:700; margin-top:2px; }
+  .over-card button, .complete-card button { display:block; width:100%; margin:8px 0; padding:13px; border:none; border-radius:40px; font-size:16px; font-weight:800;
     cursor:pointer; transition: transform .12s ease, filter .12s ease; }
-  .over-card button:hover { transform: translateY(-2px); filter: brightness(1.05); }
-  #play-again { background:var(--olive); color:#fff; box-shadow:0 5px 0 #3d5514; }
-  #change-char { background:#e2e8f0; color:#1e3a5f; box-shadow:0 5px 0 #cbd5e1; }
+  .over-card button:hover, .complete-card button:hover { transform: translateY(-2px); filter: brightness(1.05); }
+  #play-again { background:var(--olive); color:#fff; box-shadow:0 5px 0 #14532d; }
+  #next-level { background:linear-gradient(135deg,#f59e0b,#f97316); color:#fff; box-shadow:0 5px 0 #9a3412; }
+  #next-level:disabled { background:#334155; color:#94a3b8; cursor:not-allowed; box-shadow:0 5px 0 #1e293b; }
+  #change-char, #complete-menu { background:#1e293b; color:#e2e8f0; box-shadow:0 5px 0 #0f172a; }
 </style>
 </head>
 <body>
 
   <!-- ============ MENU ============ -->
   <div id="select-screen" class="screen">
-    <div class="coins-badge">🪙 <span id="coins-total">0</span></div>
+    <div class="top-badges">
+      <div class="badge">🪙 <span id="coins-total">0</span></div>
+      <div class="badge planes">✈️ <span id="planes-total">0</span></div>
+    </div>
     <h1 class="title">School <span>Rush</span></h1>
-    <p class="subtitle">Vrapo në korridor, kapërdaji pengesat, mblidh 🪙 monedha dhe <b>blej karaktere të reja</b>! Pa kohëmatës — vdes kur të kap pengesa, qeni ose arsimtari! 🐕🧑‍🏫</p>
-    <div class="sec-title">👇 Zgjidh karakterin</div>
-    <div class="char-cards" id="char-cards"></div>
-    <div class="sec-title">🛒 Dyqani — blej me monedha</div>
-    <div class="shop-cards" id="shop-cards"></div>
-    <div class="best-badge" style="margin-bottom:10px;">🏆 Rekordi: <span id="best-select">0</span> pikë · <span id="best-dist-select">0</span>m</div>
+    <p class="subtitle">30 nivele gjithnjë e më të vështira! Kërce <b>dy herë</b> për pengesat e larta. Mblidh 🪙 monedha e ✈️ aeroplanë letre për të blerë karaktere — apo <b>garo kundër NPC-ve</b>! 🏁</p>
+
+    <div class="guide-row" id="guide-row">
+      <img src="guide.png" alt="Udhëzuesi">
+      <div class="g-txt"><b>👋 Udhëzuesi yt</b><span>Kliko për të mësuar si luhet loja</span></div>
+    </div>
+
+    <div class="sec-title">🪙 Karakteret klasike — blej me monedha</div>
+    <div class="char-cards" id="char-cards-coins"></div>
+
+    <div class="sec-title">✈️ Karakteret e reja — blej me aeroplanë letre</div>
+    <div class="char-cards" id="char-cards-planes"></div>
+
+    <div class="sec-title">🗺️ Zgjidh nivelin</div>
+    <div class="levels-wrap">
+      <div class="level-grid" id="level-grid"></div>
+      <div style="color:#94a3b8;font-weight:700;">🏆 Rekordi i niveleve: <span id="unlocked-label">1</span>/30</div>
+    </div>
+
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="mode-solo">🏃 Solo</button>
+      <button class="mode-btn" id="mode-race">🏁 Garë vs NPC</button>
+    </div>
+
+    <button id="play-btn">▶️ LUaj</button>
+  </div>
+
+  <!-- ============ GUIDE MODAL ============ -->
+  <div id="guide-overlay" class="hidden">
+    <div class="guide-card">
+      <img src="guide.png" alt="Udhëzuesi">
+      <h2>👋 Si luhet loja?</h2>
+      <ul>
+        <li>🏃 <b>Vrapo</b> — karakteri vrapon vetë, shmang pengesat.</li>
+        <li>⬆️ <b>Kërce</b> — shtyp ↑ / Space / W ose prek ekranin.</li>
+        <li>🦘 <b>Kërcim i dyfishtë</b> — shtyp përsëri në ajër për pengesat e larta.</li>
+        <li>🪙 <b>Monedha</b> blejnë karakteret klasike.</li>
+        <li>✈️ <b>Aeroplanët letre</b> blejnë karakteret e reja.</li>
+        <li>🐕🧑‍🏫 <b>Ik</b> nga qeni e arsimtari kur të ndjekin (3–4 herë për nivel).</li>
+        <li>🏁 <b>Përfundo nivelin</b> për shpërblim: +100🪙 +30✈️.</li>
+        <li>🏆 <b>Garo</b> kundër meje e NPC-ve të tjerë deri në vijën e finishit!</li>
+      </ul>
+      <button id="guide-close">Kuptova! 👍</button>
+    </div>
   </div>
 
   <!-- ============ GAME ============ -->
   <div id="game-screen" class="screen hidden">
     <div id="hud">
+      <div class="hud-item level">🏫 <span id="lvl-label">Niveli 1</span></div>
+      <div class="hud-item race hidden" id="race-chip">🏁 <span id="race-pos">1/4</span></div>
       <div class="hud-item score">⭐ <span id="score">0</span></div>
       <div class="hud-item">🏃 <span id="dist">0</span>m</div>
       <div class="hud-item coins">🪙 <span id="coins">0</span></div>
+      <div class="hud-item planes">✈️ <span id="planes">0</span></div>
     </div>
+    <div id="progress-wrap"><div id="progress-fill"></div></div>
     <div id="powerup-bar">
       <div class="pu-chip star hidden" id="pu-star">⭐ <span id="pu-star-t">15s</span><div class="bar"><i id="pu-star-bar" style="width:100%"></i></div></div>
       <div class="pu-chip shoes hidden" id="pu-shoes">👟 <span id="pu-shoes-t">15s</span><div class="bar"><i id="pu-shoes-bar" style="width:100%"></i></div></div>
@@ -284,237 +417,309 @@
       <div class="dust" style="width:4px;height:4px;left:32%;bottom:14%;animation-duration:12s;animation-delay:2s;"></div>
       <div class="dust" style="width:6px;height:6px;left:55%;bottom:6%;animation-duration:10s;animation-delay:4s;"></div>
       <div class="dust" style="width:4px;height:4px;left:72%;bottom:18%;animation-duration:13s;animation-delay:1s;"></div>
-      <div class="dust" style="width:5px;height:5px;left:88%;bottom:10%;animation-duration:11s;animation-delay:3s;"></div>
-      <div class="dust" style="width:3px;height:3px;left:44%;bottom:22%;animation-duration:14s;animation-delay:5s;"></div>
+      <div id="player-shadow"></div>
       <div id="player"></div>
       <div id="chasers"></div>
+      <div id="racers"></div>
       <div id="objects"></div>
       <div id="particles"></div>
       <div id="countdown" class="hidden"></div>
       <div id="go-flash" class="hidden"></div>
-      <div class="controls-hint">↑ / SPACE / W — kërce</div>
+      <div class="controls-hint">↑ / SPACE / W — kërce · shtyp përsëri në ajër për kërcim të dyfishtë</div>
     </div>
   </div>
 
-  <!-- ============ OVER ============ -->
+  <!-- ============ GAME OVER ============ -->
   <div id="over-screen" class="screen hidden">
     <div class="over-card">
-      <h2 id="over-title">💥 U përplase!</h2>
+      <h2 id="over-title">💪 Better luck next time!</h2>
+      <div class="sub-note" id="over-sub">U përplase me pengesën!</div>
       <div class="stats">
         <div class="stat"><div class="v" id="final-score">0</div><div class="k">Pikë</div></div>
         <div class="stat"><div class="v" id="final-dist">0</div><div class="k">Metra</div></div>
         <div class="stat coins"><div class="v" id="final-coins">0</div><div class="k">Monedha</div></div>
       </div>
-      <div class="final-best" id="final-best">🏆 Rekordi: <span id="final-best-val">0</span></div>
-      <button id="play-again">🔁 Luaj përsëri</button>
-      <button id="change-char">👥 Në menu</button>
+      <div style="color:#94a3b8;font-weight:700;margin-bottom:6px;">Niveli <span id="over-level">1</span></div>
+      <button id="play-again">🔁 Provo përsëri</button>
+      <button id="change-char">🏠 Në menu</button>
+    </div>
+  </div>
+
+  <!-- ============ LEVEL COMPLETE ============ -->
+  <div id="complete-screen" class="screen hidden">
+    <div class="complete-card">
+      <h2 id="complete-title">🎉 Good job!</h2>
+      <div class="sub-note" id="complete-sub">Niveli u kompletua!</div>
+      <div class="big-reward">+100 🪙 · +30 ✈️</div>
+      <div class="stats">
+        <div class="stat"><div class="v" id="complete-score">0</div><div class="k">Pikë</div></div>
+        <div class="stat coins"><div class="v" id="complete-coins">0</div><div class="k">Monedha</div></div>
+        <div class="stat planes"><div class="v" id="complete-planes">0</div><div class="k">Aeroplanë</div></div>
+      </div>
+      <button id="next-level">▶️ Niveli tjetër</button>
+      <button id="complete-menu">🏠 Në menu</button>
     </div>
   </div>
 
 <script>
 /* ============================================================
-   SCHOOL RUSH — Subway Surfers style school-corridor runner
+   SCHOOL RUSH — 30 nivele · kërcim i dyfishtë · 12 karaktere
+   (7 klasikë me monedha + 5 të rinj me aeroplanë) · garë vs NPC
    ============================================================ */
 
-/* ---------- shared SVG bits ---------- */
-const SKIN = "#ffd5a8", SKIN_SHADE = "#f2c094";
-const face = (y) => `
-  <circle cx="50" cy="${y}" r="4" fill="#2b2b2b"/><circle cx="70" cy="${y}" r="4" fill="#2b2b2b"/>
-  <circle cx="51.5" cy="${y-1.5}" r="1.4" fill="#fff"/><circle cx="71.5" cy="${y-1.5}" r="1.4" fill="#fff"/>
-  <ellipse cx="44" cy="${y+8}" rx="4.5" ry="2.6" fill="#ffb3b3" opacity="0.7"/><ellipse cx="76" cy="${y+8}" rx="4.5" ry="2.6" fill="#ffb3b3" opacity="0.7"/>
-  <path d="M53 ${y+9} Q60 ${y+16} 67 ${y+9}" stroke="#8a5a3a" stroke-width="2.3" fill="none" stroke-linecap="round"/>`;
-const EARS = `<circle cx="38" cy="38" r="5.5" fill="${SKIN}"/><circle cx="82" cy="38" r="5.5" fill="${SKIN}"/>`;
-const NECK = `<rect x="54" y="58" width="12" height="13" fill="${SKIN_SHADE}"/>`;
-const TORSO = (c, stroke) => `<path d="M40 70 L40 120 Q40 128 48 128 L72 128 Q80 128 80 120 L80 70 Q60 64 40 70 Z" fill="${c}" ${stroke?('stroke="'+stroke+'" stroke-width="1.5"'):''}/>`;
-const ARMS = `
-  <g class="arm armL"><path d="M41 76 Q29 90 29 108" stroke="${SKIN_SHADE}" stroke-width="9" fill="none" stroke-linecap="round"/><circle cx="29" cy="109" r="5" fill="${SKIN}"/></g>
-  <g class="arm armR"><path d="M79 76 Q91 90 91 108" stroke="${SKIN_SHADE}" stroke-width="9" fill="none" stroke-linecap="round"/><circle cx="91" cy="109" r="5" fill="${SKIN}"/></g>`;
-const LEGS_PANTS = (c) => `
-  <g class="leg legL"><rect x="44" y="122" width="14" height="40" rx="6" fill="${c}"/><ellipse cx="51" cy="172" rx="9.5" ry="5" fill="#2b2b2b"/></g>
-  <g class="leg legR"><rect x="62" y="122" width="14" height="40" rx="6" fill="${c}"/><ellipse cx="69" cy="172" rx="9.5" ry="5" fill="#2b2b2b"/></g>`;
-const LEGS_SHORTS = (c) => `
-  <g class="leg legL"><rect x="44" y="122" width="14" height="16" rx="5" fill="${c}"/><rect x="45" y="136" width="12" height="26" rx="5" fill="${SKIN}"/><ellipse cx="51" cy="172" rx="9.5" ry="5" fill="#2b2b2b"/></g>
-  <g class="leg legR"><rect x="62" y="122" width="14" height="16" rx="5" fill="${c}"/><rect x="63" y="136" width="12" height="26" rx="5" fill="${SKIN}"/><ellipse cx="69" cy="172" rx="9.5" ry="5" fill="#2b2b2b"/></g>`;
+/* ---------- palette & outline ---------- */
+const OUT = '#241d31';
+const SKIN = '#ffd7ae', SKIN_D = '#f0bd8c', SKIN_SHADE = '#eab481';
+function gdef(id, c1, c2){
+  return `<linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient>`;
+}
 
-const hairLong = (c) => `
-  <path d="M36 40 Q32 4 60 3 Q88 4 84 40 L86 118 Q85 128 76 126 Q74 104 73 82 Q70 64 63 60 Q56 56 49 62 Q44 74 43 92 Q42 104 41 126 Q32 128 31 118 Z" fill="${c}"/>
-  <path d="M36 38 Q38 12 60 12 Q82 12 84 38 Q76 24 60 24 Q44 24 36 38 Z" fill="${c}"/>`;
-const hairBun = (c) => `
-  <circle cx="60" cy="8" r="11" fill="${c}"/>
-  <path d="M36 38 Q32 4 60 3 Q88 4 84 38 Q81 18 60 18 Q39 18 36 38 Z" fill="${c}"/>
-  <path d="M36 36 Q40 14 60 14 Q80 14 84 36 Q76 26 60 26 Q44 26 36 36 Z" fill="${c}"/>`;
-const hairShort = (c) => `
-  <path d="M36 40 Q32 6 60 5 Q88 6 84 40 Q81 20 60 20 Q39 20 36 40 Z" fill="${c}"/>
-  <path d="M36 38 Q40 24 60 24 Q80 24 84 38 Q76 34 60 34 Q44 34 36 38 Z" fill="${c}"/>`;
-const hairSpiky = (c) => `
-  <path d="M36 40 Q32 8 60 7 Q88 8 84 40 Q80 22 60 22 Q40 22 36 40 Z" fill="${c}"/>
-  <path d="M34 42 L38 24 L45 32 L52 17 L60 30 L68 17 L75 32 L82 24 L86 42 Q60 20 34 42 Z" fill="${c}"/>`;
-const cap = (c, dark) => `
-  <path d="M40 40 Q40 16 60 16 Q80 16 80 40 Z" fill="${c}"/>
-  <path d="M37 39 Q60 42 83 39 Q83 44 60 44 Q37 44 37 39 Z" fill="${dark}"/>
-  <circle cx="60" cy="26" r="2.4" fill="${dark}"/>`;
-const DRESS = (c) => `
-  <path d="M40 70 L40 92 Q40 100 48 100 L72 100 Q80 100 80 92 L80 70 Q60 64 40 70 Z" fill="${c}"/>
-  <path d="M42 100 Q28 130 28 158 Q28 166 44 166 L76 166 Q92 166 92 158 Q92 130 78 100 Z" fill="${c}"/>`;
-const RED_LEGS = `
-  <g class="leg legL"><rect x="49" y="163" width="8" height="9" rx="3" fill="${SKIN}"/><ellipse cx="53" cy="176" rx="8.5" ry="5" fill="#8a1f2d"/></g>
-  <g class="leg legR"><rect x="63" y="163" width="8" height="9" rx="3" fill="${SKIN}"/><ellipse cx="67" cy="176" rx="8.5" ry="5" fill="#8a1f2d"/></g>`;
-const DRESS_SHORT = (c) => `
-  <path d="M40 70 L40 92 Q40 100 48 100 L72 100 Q80 100 80 92 L80 70 Q60 64 40 70 Z" fill="${c}"/>
-  <path d="M42 100 Q30 120 30 136 Q30 142 44 142 L76 142 Q90 142 90 136 Q90 120 78 100 Z" fill="${c}"/>`;
-const SKIN_LEGS = (shoeC) => `
-  <g class="leg legL"><rect x="45" y="142" width="12" height="20" rx="5" fill="${SKIN}"/><ellipse cx="51" cy="172" rx="9.5" ry="5" fill="${shoeC}"/></g>
-  <g class="leg legR"><rect x="63" y="142" width="12" height="20" rx="5" fill="${SKIN}"/><ellipse cx="69" cy="172" rx="9.5" ry="5" fill="${shoeC}"/></g>`;
-const hairPony = (c, tie) => `
-  ${hairLong(c)}
-  <path d="M54 14 Q56 -1 68 3 Q67 14 58 14 Z" fill="${c}"/>
-  <rect x="56" y="2" width="11" height="6" rx="3" fill="${tie}"/>`;
-const sideLocks = (c) => `
-  <path d="M38 42 Q28 28 39 22 Q46 32 42 47 Q41 60 39 73 Q38 82 41 88 Q48 78 44 63 Q45 50 43 44 Z" fill="${c}"/>
-  <path d="M82 42 Q92 28 81 22 Q74 32 78 47 Q79 60 81 73 Q82 82 79 88 Q72 78 76 63 Q75 50 77 44 Z" fill="${c}"/>`;
-const beanie = (c, dark) => `
-  <path d="M39 40 Q36 12 60 11 Q84 12 81 40 Q78 18 60 18 Q42 18 39 40 Z" fill="${c}"/>
-  <rect x="36" y="36" width="48" height="11" rx="5.5" fill="${c}"/>
-  <path d="M36 40 Q60 46 84 40 Q84 45 60 46 Q36 45 36 40 Z" fill="${dark}"/>
-  <circle cx="60" cy="8" r="5" fill="${c}"/>`;
+/* ============================================================
+   FRONT VIEW (menu) — chibi cartoon with outline + gradient
+   ============================================================ */
+function frontHead(id, hairSvg, hairColor){
+  return `<g>
+    <rect x="62" y="52" width="16" height="18" fill="url(#${id}sk)" stroke="${OUT}" stroke-width="2.5"/>
+    ${hairSvg}
+    <ellipse cx="70" cy="44" rx="27" ry="29" fill="url(#${id}sk)" stroke="${OUT}" stroke-width="3"/>
+    <circle cx="60" cy="44" r="4.2" fill="#2b2330"/><circle cx="80" cy="44" r="4.2" fill="#2b2330"/>
+    <circle cx="61.4" cy="42.4" r="1.5" fill="#fff"/><circle cx="81.4" cy="42.4" r="1.5" fill="#fff"/>
+    <path d="M52 36 Q58 33 63 36" stroke="${OUT}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <path d="M77 36 Q82 33 88 36" stroke="${OUT}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <ellipse cx="52" cy="52" rx="5" ry="3" fill="#ff9aa0" opacity="0.65"/>
+    <ellipse cx="88" cy="52" rx="5" ry="3" fill="#ff9aa0" opacity="0.65"/>
+    <path d="M63 53 Q70 60 77 53" stroke="#8a4a3a" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+  </g>`;
+}
+function frontHair(kind, id, c, c2){
+  if (kind === 'pony') return `<g><path d="M43 46 Q42 8 70 7 Q98 8 97 46 Q92 24 70 24 Q48 24 43 46 Z" fill="url(#${id}hr)" stroke="${OUT}" stroke-width="3"/><path d="M40 30 Q24 32 26 54 Q34 46 43 42 Z" fill="url(#${id}hr)" stroke="${OUT}" stroke-width="2.5"/></g>`;
+  if (kind === 'bun') return `<g><circle cx="70" cy="10" r="13" fill="url(#${id}hr)" stroke="${OUT}" stroke-width="3"/><path d="M43 46 Q42 8 70 7 Q98 8 97 46 Q92 24 70 24 Q48 24 43 46 Z" fill="url(#${id}hr)" stroke="${OUT}" stroke-width="3"/></g>`;
+  if (kind === 'short') return `<g><path d="M43 46 Q42 8 70 7 Q98 8 97 46 Q92 22 70 22 Q48 22 43 46 Z" fill="url(#${id}hr)" stroke="${OUT}" stroke-width="3"/><path d="M43 44 Q46 28 70 28 Q94 28 97 44 Q90 36 70 36 Q50 36 43 44 Z" fill="${c}" opacity="0.5"/></g>`;
+  if (kind === 'spiky') return `<g><path d="M43 46 Q42 8 70 7 Q98 8 97 46 Q92 22 70 22 Q48 22 43 46 Z" fill="url(#${id}hr)" stroke="${OUT}" stroke-width="3"/><path d="M43 44 L46 24 L54 32 L60 16 L70 30 L80 16 L86 32 L94 24 L97 44 Q70 20 43 44 Z" fill="url(#${id}hr)" stroke="${OUT}" stroke-width="2.5"/></g>`;
+  if (kind === 'long') return `<g><path d="M43 46 Q42 8 70 7 Q98 8 97 46 L99 118 Q99 130 90 130 Q86 116 85 96 Q84 74 78 66 Q72 60 62 60 Q56 66 55 96 Q54 116 50 130 Q41 130 41 118 Z" fill="url(#${id}hr)" stroke="${OUT}" stroke-width="3"/><path d="M43 46 Q46 24 70 24 Q94 24 97 46 Q92 30 70 30 Q48 30 43 46 Z" fill="url(#${id}hr)"/></g>`;
+  if (kind === 'cap') return `<g><path d="M43 46 Q42 14 70 13 Q98 14 97 46 Z" fill="url(#${id}hr)" stroke="${OUT}" stroke-width="3"/><path d="M40 44 Q70 50 100 44 Q100 50 70 50 Q40 50 40 44 Z" fill="${c2}" stroke="${OUT}" stroke-width="2.5"/><circle cx="70" cy="30" r="3" fill="${c2}"/></g>`;
+  return '';
+}
+function frontChar(key, cfg){
+  const id = 'f' + key;
+  const shirt = cfg.shirt || '#3b82f6';
+  const pants = cfg.pants || '#31456e';
+  const armsSleeve = cfg.sleeve || shirt;
+  return `<svg viewBox="0 0 140 200">
+    <defs>${gdef(id+'sk', SKIN, SKIN_D)}${gdef(id+'sh', cfg.shirtL || shirt, cfg.shirtD || shirt)}${gdef(id+'hr', cfg.hairL || cfg.hair, cfg.hairD || cfg.hair)}</defs>
+    <path d="M52 96 L48 138 Q48 144 56 144 L84 144 Q92 144 92 138 L88 96 Q70 90 52 96 Z" fill="url(#${id}sh)" stroke="${OUT}" stroke-width="3"/>
+    <g class="arm"><path d="M50 100 Q38 118 38 138" stroke="${OUT}" stroke-width="13" fill="none" stroke-linecap="round"/><path d="M50 100 Q38 118 38 138" stroke="url(#${id}sh)" stroke-width="8" fill="none" stroke-linecap="round"/><circle cx="38" cy="139" r="6" fill="url(#${id}sk)" stroke="${OUT}" stroke-width="2.5"/></g>
+    <g class="arm"><path d="M90 100 Q102 118 102 138" stroke="${OUT}" stroke-width="13" fill="none" stroke-linecap="round"/><path d="M90 100 Q102 118 102 138" stroke="url(#${id}sh)" stroke-width="8" fill="none" stroke-linecap="round"/><circle cx="102" cy="139" r="6" fill="url(#${id}sk)" stroke="${OUT}" stroke-width="2.5"/></g>
+    <g class="leg"><rect x="52" y="140" width="16" height="42" rx="6" fill="${pants}" stroke="${OUT}" stroke-width="2.5"/><ellipse cx="60" cy="188" rx="11" ry="6" fill="#2b2330" stroke="${OUT}" stroke-width="2"/></g>
+    <g class="leg"><rect x="72" y="140" width="16" height="42" rx="6" fill="${pants}" stroke="${OUT}" stroke-width="2.5"/><ellipse cx="80" cy="188" rx="11" ry="6" fill="#2b2330" stroke="${OUT}" stroke-width="2"/></g>
+    ${frontHead(id, frontHair(cfg.hairKind, id, cfg.hair, cfg.hairD), cfg.hair)}
+  </svg>`;
+}
 
+/* ============================================================
+   SIDE VIEW (running right) — cartoon with outline + gradient
+   ============================================================ */
+function sideHead(id, hairKind, hair, hairD){
+  return `<g>
+    <rect x="72" y="40" width="13" height="20" fill="url(#${id}sk)" stroke="${OUT}" stroke-width="2.5"/>
+    ${sideHair(hairKind, id, hair, hairD)}
+    <ellipse cx="86" cy="38" rx="21" ry="24" fill="url(#${id}sk)" stroke="${OUT}" stroke-width="3"/>
+    <ellipse cx="94" cy="36" rx="5" ry="6.5" fill="#fff"/>
+    <circle cx="95" cy="37" r="3" fill="#2b2330"/><circle cx="96" cy="35.4" r="1.2" fill="#fff"/>
+    <path d="M90 29 Q95 27 99 29" stroke="${OUT}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <ellipse cx="97" cy="46" rx="4" ry="2.6" fill="#ff9aa0" opacity="0.65"/>
+    <path d="M99 43 Q102 46 99 48" stroke="#8a4a3a" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  </g>`;
+}
+function sideHair(kind, id, c, c2){
+  if (kind === 'pony') return `<g><path d="M65 40 Q62 6 88 5 Q108 6 107 40 Q102 18 88 18 Q74 18 65 40 Z" fill="url(#${id}hr)" stroke="${OUT}" stroke-width="3"/><path d="M68 20 Q52 22 54 44 Q62 40 72 32 Z" fill="url(#${id}hr)" stroke="${OUT}" stroke-width="2.5"/></g>`;
+  if (kind === 'bun') return `<g><circle cx="70" cy="8" r="13" fill="url(#${id}hr)" stroke="${OUT}" stroke-width="3"/><path d="M65 40 Q62 6 88 5 Q108 6 107 40 Q102 18 88 18 Q74 18 65 40 Z" fill="url(#${id}hr)" stroke="${OUT}" stroke-width="3"/></g>`;
+  if (kind === 'short') return `<g><path d="M65 40 Q62 6 88 5 Q108 6 107 40 Q102 18 88 18 Q74 18 65 40 Z" fill="url(#${id}hr)" stroke="${OUT}" stroke-width="3"/><path d="M66 36 Q72 24 88 24 Q102 24 106 36 Q98 30 88 30 Q76 30 66 36 Z" fill="${c}" opacity="0.5"/></g>`;
+  if (kind === 'spiky') return `<g><path d="M65 40 Q62 6 88 5 Q108 6 107 40 Q102 18 88 18 Q74 18 65 40 Z" fill="url(#${id}hr)" stroke="${OUT}" stroke-width="3"/><path d="M64 34 L60 18 L70 26 L76 10 L86 24 L96 10 L98 34 Q82 20 64 34 Z" fill="url(#${id}hr)" stroke="${OUT}" stroke-width="2.5"/></g>`;
+  if (kind === 'long') return `<g><path d="M65 40 Q62 6 88 5 Q108 6 107 40 L109 112 Q109 126 99 126 Q95 110 94 90 Q93 70 86 64 Q80 58 72 64 Q65 70 64 90 Q63 110 59 126 Q49 126 49 112 Z" fill="url(#${id}hr)" stroke="${OUT}" stroke-width="3"/><path d="M65 40 Q70 22 88 22 Q106 22 107 40 Q100 26 88 26 Q74 26 65 40 Z" fill="url(#${id}hr)"/></g>`;
+  if (kind === 'cap') return `<g><path d="M65 40 Q62 12 88 11 Q108 12 107 40 Z" fill="url(#${id}hr)" stroke="${OUT}" stroke-width="3"/><path d="M62 38 Q88 46 110 38 Q110 44 88 44 Q62 44 62 38 Z" fill="${c2}" stroke="${OUT}" stroke-width="2.5"/><circle cx="88" cy="28" r="3" fill="${c2}"/></g>`;
+  return '';
+}
+function sideChar(key, cfg){
+  const id = 's' + key;
+  const shirt = cfg.shirt || '#3b82f6';
+  const pants = cfg.pants || '#31456e';
+  const legs = cfg.skinLegs
+    ? { back:`<path d="M72 112 L62 140 L52 164" stroke="${OUT}" stroke-width="15" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M72 112 L62 140 L52 164" stroke="url(#${id}sk)" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="48" cy="170" rx="12" ry="6" fill="${cfg.shoe || '#e5e7eb'}" stroke="${OUT}" stroke-width="2"/>`,
+      front:`<path d="M88 112 L98 138 L92 164" stroke="${OUT}" stroke-width="15" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M88 112 L98 138 L92 164" stroke="url(#${id}sk)" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="92" cy="170" rx="12" ry="6" fill="${cfg.shoe || '#e5e7eb'}" stroke="${OUT}" stroke-width="2"/>` }
+    : { back:`<path d="M72 112 L60 142 L50 166" stroke="${OUT}" stroke-width="17" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M72 112 L60 142 L50 166" stroke="${pants}" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="46" cy="172" rx="13" ry="7" fill="#2b2330" stroke="${OUT}" stroke-width="2"/>`,
+        front:`<path d="M88 112 L100 140 L94 166" stroke="${OUT}" stroke-width="17" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M88 112 L100 140 L94 166" stroke="${pants}" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="94" cy="172" rx="13" ry="7" fill="#2b2330" stroke="${OUT}" stroke-width="2"/>` };
+  const dress = cfg.dress
+    ? `<path d="M66 68 L92 76 L82 122 Q68 132 54 118 Z" fill="url(#${id}sh)" stroke="${OUT}" stroke-width="3"/>`
+    : `<path d="M68 62 L96 70 L88 128 L72 128 Z" fill="url(#${id}sh)" stroke="${OUT}" stroke-width="3"/>`;
+  return `<svg viewBox="0 0 160 200">
+    <defs>${gdef(id+'sk', SKIN, SKIN_D)}${gdef(id+'sh', cfg.shirtL || shirt, cfg.shirtD || shirt)}${gdef(id+'hr', cfg.hairL || cfg.hair, cfg.hairD || cfg.hair)}</defs>
+    <g class="arm armL"><path d="M82 74 Q64 92 58 112" stroke="${OUT}" stroke-width="14" fill="none" stroke-linecap="round"/><path d="M82 74 Q64 92 58 112" stroke="url(#${id}sk)" stroke-width="9" fill="none" stroke-linecap="round"/><circle cx="58" cy="113" r="5.5" fill="url(#${id}sk)" stroke="${OUT}" stroke-width="2.5"/></g>
+    <g class="leg legL">${legs.back}</g>
+    ${dress}
+    <g class="leg legR">${legs.front}</g>
+    <g class="arm armR"><path d="M92 74 Q108 88 114 108" stroke="${OUT}" stroke-width="14" fill="none" stroke-linecap="round"/><path d="M92 74 Q108 88 114 108" stroke="url(#${id}sk)" stroke-width="9" fill="none" stroke-linecap="round"/><circle cx="114" cy="109" r="5.5" fill="url(#${id}sk)" stroke="${OUT}" stroke-width="2.5"/></g>
+    ${sideHead(id, cfg.hairKind, cfg.hair, cfg.hairD)}
+  </svg>`;
+}
+
+/* ---------- character data ---------- */
 const CHARACTERS = {
-  sky: { name:"Sky", color:"#4aa3e0", price:0, desc:"Vajzë me flokë bjonde e xhaketë të bardhë",
-    svg:`<svg viewBox="0 0 120 184">${hairPony("#f2c94c","#4aa3e0")}${EARS}<ellipse cx="60" cy="36" rx="21" ry="24" fill="${SKIN}"/>${face(38)}${NECK}${TORSO("#eef7fd","#bfe0f2")}${ARMS}${LEGS_PANTS("#7fb3d9")}</svg>` },
-  tricky: { name:"Tricky", color:"#3b82f6", price:0, desc:"Vajzë me flokë të zeza në bun e xhaketë blu",
-    svg:`<svg viewBox="0 0 120 184">${hairBun("#1a1a1a")}${EARS}<ellipse cx="60" cy="36" rx="21" ry="24" fill="${SKIN}"/>${face(38)}${NECK}${TORSO("#2f6bd8")}${ARMS}${LEGS_PANTS("#d8c49a")}</svg>` },
-  spike: { name:"Spike", color:"#ef4444", price:0, desc:"Djalë me flokë kafe me gjemba e xhaketë të kuqe",
-    svg:`<svg viewBox="0 0 120 184">${hairSpiky("#8b5a2b")}${EARS}<ellipse cx="60" cy="36" rx="21" ry="24" fill="${SKIN}"/>${face(38)}${NECK}${TORSO("#e23b2e")}<path d="M60 72 L60 128" stroke="#fff" stroke-width="3" stroke-dasharray="6 5"/>${ARMS}${LEGS_PANTS("#4a6fa5")}</svg>` },
-  luna: { name:"Luna", color:"#8b5cf6", price:150, desc:"Vajzë me flokë të zeza të gjata e fustan të bardhë të shkurtër",
-    svg:`<svg viewBox="0 0 120 184">${hairLong("#1a1a1a")}${EARS}<ellipse cx="60" cy="36" rx="21" ry="24" fill="${SKIN}"/>${face(38)}${NECK}${DRESS_SHORT("#f5f5f5")}${ARMS}${SKIN_LEGS("#e5e7eb")}</svg>` },
-  rex: { name:"Rex", color:"#60a5fa", price:250, desc:"Djalë me flokë kafe, maicë të bardhë e shorce të kaltër",
-    svg:`<svg viewBox="0 0 120 184">${hairShort("#8b5a2b")}${EARS}<ellipse cx="60" cy="36" rx="21" ry="24" fill="${SKIN}"/>${face(38)}${NECK}${TORSO("#f5f5f5","#d4d4d4")}${ARMS}${LEGS_SHORTS("#a5d8ff")}</svg>` },
-  mia: { name:"Mia", color:"#ef4444", price:350, desc:"Vajzë me flokë të kuq, maicë të bardhë e shorce",
-    svg:`<svg viewBox="0 0 120 184">${hairLong("#e23b2e")}${EARS}<ellipse cx="60" cy="36" rx="21" ry="24" fill="${SKIN}"/>${face(38)}${NECK}${TORSO("#f5f5f5","#d4d4d4")}${ARMS}${LEGS_SHORTS("#4a6fa5")}</svg>` },
-  blaze: { name:"Blaze", color:"#dc2626", price:500, desc:"Djalë me flokë të zinj, maicë të kuqe e xhinse",
-    svg:`<svg viewBox="0 0 120 184">${hairShort("#1a1a1a")}${EARS}<ellipse cx="60" cy="36" rx="21" ry="24" fill="${SKIN}"/>${face(38)}${NECK}${TORSO("#e23b2e")}${ARMS}${LEGS_PANTS("#4a6fa5")}</svg>` },
+  /* klasikë (monedha) */
+  sky:   { name:"Sky", color:"#4aa3e0", price:0, currency:'coins', desc:"Bjonde me xhaketë të bardhë", hairKind:'pony', hair:'#f2c94c', hairD:'#d9a821', shirt:'#eef7fd', shirtD:'#cfe0f0', pants:'#7fb3d9' },
+  tricky:{ name:"Tricky", color:"#3b82f6", price:0, currency:'coins', desc:"Flokë të zeza në bun, xhaketë blu", hairKind:'bun', hair:'#1a1a1a', hairD:'#000', shirt:'#2f6bd8', shirtD:'#1f4aa8', pants:'#d8c49a' },
+  spike: { name:"Spike", color:"#ef4444", price:0, currency:'coins', desc:"Flokë me gjemba, xhaketë e kuqe", hairKind:'spiky', hair:'#8b5a2b', hairD:'#6b4319', shirt:'#e23b2e', shirtD:'#b01f1f', pants:'#4a6fa5' },
+  luna:  { name:"Luna", color:"#8b5cf6", price:150, currency:'coins', desc:"Flokë të zeza të gjata, fustan i bardhë", hairKind:'long', hair:'#1a1a1a', hairD:'#000', shirt:'#f5f5f5', shirtD:'#d8d8d8', skinLegs:true, dress:true, shoe:'#e5e7eb' },
+  rex:   { name:"Rex", color:"#60a5fa", price:250, currency:'coins', desc:"Maicë të bardhë e shorce të kaltër", hairKind:'short', hair:'#8b5a2b', hairD:'#6b4319', shirt:'#f5f5f5', shirtD:'#d8d8d8', pants:'#a5d8ff', shorts:true },
+  mia:   { name:"Mia", color:"#ef4444", price:350, currency:'coins', desc:"Flokë të kuq, maicë të bardhë", hairKind:'long', hair:'#e23b2e', hairD:'#b01f1f', shirt:'#f5f5f5', shirtD:'#d8d8d8', pants:'#4a6fa5', shorts:true },
+  blaze: { name:"Blaze", color:"#dc2626", price:500, currency:'coins', desc:"Flokë të zinj, maicë të kuqe", hairKind:'short', hair:'#1a1a1a', hairD:'#000', shirt:'#e23b2e', shirtD:'#b01f1f', pants:'#4a6fa5' },
+  /* të rinj (aeroplanë letre) */
+  anna:  { name:"Anna", color:"#f472b6", price:0, currency:'planes', desc:"Bjonde me xhaketë të bardhë", hairKind:'pony', hair:'#f2c94c', hairD:'#d9a821', shirt:'#f8fafc', shirtD:'#d3e0ec', pants:'#7fb3d9' },
+  jake:  { name:"Jake", color:"#3b82f6", price:60, currency:'planes', desc:"Kapuç blu e flokë kafe", hairKind:'spiky', hair:'#6b4a2b', hairD:'#4c3418', shirt:'#2f6bd8', shirtD:'#1f4aa8', pants:'#31456e' },
+  love:  { name:"Love", color:"#ec4899", price:90, currency:'planes', desc:"Flokë të kuq e fustan rozë", hairKind:'long', hair:'#e23b2e', hairD:'#b01f1f', shirt:'#f43f8e', shirtD:'#c2256b', skinLegs:true, dress:true, shoe:'#fda4af' },
+  rio:   { name:"Rio", color:"#14b8a6", price:150, currency:'planes', desc:"Sportist me kapak teal", hairKind:'cap', hair:'#0d9488', hairD:'#0f766e', shirt:'#0d9488', shirtD:'#0b6b62', pants:'#facc15', shorts:true },
+  kiko:  { name:"Kiko", color:"#8b5cf6", price:240, currency:'planes', desc:"Flokë të purpurt, veshje cool", hairKind:'spiky', hair:'#a855f7', hairD:'#7e22ce', shirt:'#7c3aed', shirtD:'#5b21b6', pants:'#312e81' },
 };
 
-/* ---------- back-view (running forward, like Subway Surfers) ---------- */
-const backHairLong = (c) => `
-  <ellipse cx="60" cy="36" rx="22" ry="25" fill="${c}"/>
-  <path d="M36 40 Q32 4 60 3 Q88 4 84 40 L86 120 Q85 130 76 128 Q74 106 73 84 Q70 66 63 62 Q56 58 49 64 Q44 76 43 94 Q42 106 41 128 Q32 130 31 120 Z" fill="${c}"/>`;
-const backHairBun = (c) => `
-  <circle cx="60" cy="9" r="11" fill="${c}"/>
-  <ellipse cx="60" cy="37" rx="22" ry="24" fill="${c}"/>`;
-const backHairShort = (c) => `<ellipse cx="60" cy="36" rx="22" ry="25" fill="${c}"/>`;
-const backHairSpiky = (c) => `
-  <ellipse cx="60" cy="37" rx="22" ry="24" fill="${c}"/>
-  <path d="M40 32 L44 18 L52 26 L60 14 L68 26 L76 18 L80 32 Q60 22 40 32 Z" fill="${c}"/>`;
-const backCap = (c, d) => `
-  <ellipse cx="60" cy="36" rx="22" ry="25" fill="#2b2b2b"/>
-  <path d="M40 40 Q40 16 60 16 Q80 16 80 40 Z" fill="${c}"/>
-  <circle cx="60" cy="26" r="2.4" fill="${d}"/>`;
-const backView = (head, shirt, legs, stroke) => `<svg viewBox="0 0 120 184">${head}${TORSO(shirt, stroke)}${ARMS}${legs}</svg>`;
-const girlBack = (head) => `<svg viewBox="0 0 120 184">${head}${DRESS("#b0273a")}${ARMS}${RED_LEGS}</svg>`;
-const girlBackShort = (head) => `<svg viewBox="0 0 120 184">${head}${DRESS_SHORT("#f5f5f5")}${ARMS}${SKIN_LEGS("#e5e7eb")}</svg>`;
-const backPony = (c) => `${backHairLong(c)}<path d="M52 10 Q56 -2 68 2 Q66 12 58 12 Z" fill="${c}"/>`;
-const backBeanie = (c, dark, hair) => `
-  <ellipse cx="60" cy="40" rx="22" ry="20" fill="${hair}"/>
-  <path d="M39 42 Q36 18 60 17 Q84 18 81 42 Z" fill="${c}"/>
-  <rect x="38" y="36" width="44" height="11" rx="5" fill="${c}"/>
-  <path d="M38 40 Q60 45 82 40 Q82 45 60 45 Q38 45 38 40 Z" fill="${dark}"/>`;
-
-const BACKS = {
-  sky:   backView(backPony("#f2c94c"), "#eef7fd", LEGS_PANTS("#7fb3d9"), "#bfe0f2"),
-  tricky: backView(backHairBun("#1a1a1a"), "#2f6bd8", LEGS_PANTS("#d8c49a")),
-  spike: backView(backHairSpiky("#8b5a2b"), "#e23b2e", LEGS_PANTS("#4a6fa5")),
-  luna:  girlBackShort(backHairLong("#1a1a1a")),
-  rex:   backView(backHairShort("#8b5a2b"), "#f5f5f5", LEGS_SHORTS("#a5d8ff"), "#d4d4d4"),
-  mia:   backView(backHairLong("#e23b2e"), "#f5f5f5", LEGS_SHORTS("#4a6fa5"), "#d4d4d4"),
-  blaze: backView(backHairShort("#1a1a1a"), "#e23b2e", LEGS_PANTS("#4a6fa5")),
-};
-
-/* ---------- side-view (profile, running right) ---------- */
-const sideSVG = (head, shirt, lower) => `<svg viewBox="0 0 140 190">
-  <g class="arm armL"><path d="M70 68 L52 90 L46 108" stroke="${SKIN_SHADE}" stroke-width="8" stroke-linecap="round" fill="none"/></g>
-  ${lower.back}
-  ${shirt}
-  ${lower.front}
-  <g class="arm armR"><path d="M86 70 L98 92 L96 108" stroke="${SKIN_SHADE}" stroke-width="8" stroke-linecap="round" fill="none"/></g>
-  ${head}
-</svg>`;
-const sHead = (hair) => `<ellipse cx="76" cy="40" rx="17" ry="19" fill="${SKIN}"/>${hair}
-  <circle cx="86" cy="39" r="3" fill="#2b2b2b"/><circle cx="87" cy="37.6" r="1" fill="#fff"/>
-  <path d="M92 44 Q95 46 92 48" stroke="#8a5a3a" stroke-width="2" fill="none" stroke-linecap="round"/>`;
-const sHairShort = (c) => `<path d="M59 44 Q55 20 76 19 Q93 20 94 42 Q90 24 76 24 Q63 24 59 44 Z" fill="${c}"/>`;
-const sHairSpiky = (c) => `<path d="M59 44 Q55 20 76 19 Q93 20 94 42 Q90 24 76 24 Q63 24 59 44 Z" fill="${c}"/><path d="M60 24 L52 14 L64 21 L70 8 L80 21 L88 10 L88 24 Z" fill="${c}"/>`;
-const sHairLong = (c) => `<path d="M59 44 Q55 20 76 19 Q93 20 94 42 Q90 24 76 24 Q62 24 60 44 L58 104 Q57 118 65 120 Q71 118 69 104 Z" fill="${c}"/>`;
-const sHairBun = (c) => `<circle cx="57" cy="17" r="11" fill="${c}"/><path d="M59 44 Q55 20 76 19 Q93 20 94 42 Q90 24 76 24 Q63 24 59 44 Z" fill="${c}"/>`;
-const sHairPony = (c) => `<path d="M59 44 Q55 20 76 19 Q93 20 94 42 Q90 24 76 24 Q63 24 59 44 Z" fill="${c}"/><path d="M58 30 Q40 26 38 46 Q45 42 56 40 Z" fill="${c}"/>`;
-const sPants = (c) => ({
-  back: `<g class="leg legL"><path d="M66 118 L48 146 L40 168" stroke="${c}" stroke-width="13" stroke-linecap="round" fill="none"/><ellipse cx="38" cy="172" rx="13" ry="6" fill="#2b2b2b"/></g>`,
-  front: `<g class="leg legR"><path d="M78 118 L92 142 L86 168" stroke="${c}" stroke-width="13" stroke-linecap="round" fill="none"/><ellipse cx="86" cy="172" rx="13" ry="6" fill="#2b2b2b"/></g>`
+/* generate front + side SVGs */
+const CHARACTER_SVGS = {}, SIDES = {};
+Object.entries(CHARACTERS).forEach(([k, c]) => {
+  CHARACTER_SVGS[k] = frontChar(k, c);
+  SIDES[k] = sideChar(k, c);
 });
-const sShorts = (c) => ({
-  back: `<g class="leg legL"><rect x="52" y="112" width="16" height="14" rx="4" fill="${c}"/><path d="M58 124 L52 150 L47 168" stroke="${SKIN}" stroke-width="11" stroke-linecap="round" fill="none"/><ellipse cx="45" cy="172" rx="12" ry="6" fill="#2b2b2b"/></g>`,
-  front: `<g class="leg legR"><rect x="72" y="112" width="16" height="14" rx="4" fill="${c}"/><path d="M80 124 L88 146 L83 168" stroke="${SKIN}" stroke-width="11" stroke-linecap="round" fill="none"/><ellipse cx="83" cy="172" rx="12" ry="6" fill="#2b2b2b"/></g>`
-});
-const sSkinLegs = {
-  back: `<g class="leg legL"><path d="M62 124 L56 150 L50 168" stroke="${SKIN}" stroke-width="11" stroke-linecap="round" fill="none"/><ellipse cx="48" cy="172" rx="12" ry="6" fill="#e5e7eb"/></g>`,
-  front: `<g class="leg legR"><path d="M76 124 L84 146 L79 168" stroke="${SKIN}" stroke-width="11" stroke-linecap="round" fill="none"/><ellipse cx="79" cy="172" rx="12" ry="6" fill="#e5e7eb"/></g>`
-};
-const sDressPath = (c) => `<path d="M62 64 L88 70 L82 122 Q64 130 52 116 Z" fill="${c}"/>`;
-
-const SIDES = {
-  sky:    sideSVG(sHead(sHairPony("#f2c94c")), `<path d="M62 64 L88 70 L78 120 L56 114 Z" fill="#eef7fd"/>`, sPants("#7fb3d9")),
-  tricky: sideSVG(sHead(sHairBun("#1a1a1a")), `<path d="M62 64 L88 70 L78 120 L56 114 Z" fill="#2f6bd8"/>`, sPants("#d8c49a")),
-  spike:  sideSVG(sHead(sHairSpiky("#8b5a2b")), `<path d="M62 64 L88 70 L78 120 L56 114 Z" fill="#e23b2e"/>`, sPants("#4a6fa5")),
-  luna:   sideSVG(sHead(sHairLong("#1a1a1a")), sDressPath("#f5f5f5"), sSkinLegs),
-  rex:    sideSVG(sHead(sHairShort("#8b5a2b")), `<path d="M62 64 L88 70 L78 120 L56 114 Z" fill="#f5f5f5"/>`, sShorts("#a5d8ff")),
-  mia:    sideSVG(sHead(sHairLong("#e23b2e")), `<path d="M62 64 L88 70 L78 120 L56 114 Z" fill="#f5f5f5"/>`, sShorts("#4a6fa5")),
-  blaze:  sideSVG(sHead(sHairShort("#1a1a1a")), `<path d="M62 64 L88 70 L78 120 L56 114 Z" fill="#e23b2e"/>`, sPants("#4a6fa5")),
-};
 
 /* ---------- object / chaser SVGs ---------- */
 const SVG = {
   coin: `<svg viewBox="0 0 44 44"><g class="c-spin"><circle cx="22" cy="22" r="20" fill="#ffd400" stroke="#e6a800" stroke-width="3"/><circle cx="22" cy="22" r="13" fill="none" stroke="#f0c000" stroke-width="2.5"/><ellipse cx="16" cy="15" rx="6" ry="3.5" fill="#fff8c0" opacity="0.9" transform="rotate(-30 16 15)"/></g></svg>`,
   star: `<svg viewBox="0 0 50 50"><path d="M25 2 L31 18 L48 18 L34 28 L39 45 L25 35 L11 45 L16 28 L2 18 L19 18 Z" fill="#ffd400" stroke="#e6a800" stroke-width="2"/><circle cx="20" cy="18" r="3" fill="#fff" opacity="0.9"/></svg>`,
   shoes: `<svg viewBox="0 0 56 40"><path d="M4 26 L46 26 Q54 26 52 33 L48 33 Q48 30 44 30 L12 30 Q8 30 6 33 L2 33 Z" fill="#fff" stroke="#94a3b8" stroke-width="2"/><path d="M4 33 L52 33 Q54 33 53 36 L3 36 Z" fill="#3b82f6"/><path d="M40 20 L50 20 L52 26 L40 26 Z" fill="#fff" stroke="#94a3b8" stroke-width="2"/><path d="M42 22 L47 22 L48 25 L42 25 Z" fill="#3b82f6"/></svg>`,
-  rock: `<svg viewBox="0 0 60 52"><path d="M7 50 L17 24 L31 10 L47 22 L54 50 Z" fill="#4a5568" stroke="#1e293b" stroke-width="2.5"/><path d="M17 24 L31 10 L36 24 Z" fill="#6b7280"/><path d="M9 41 L47 41" stroke="#fff" stroke-width="9" stroke-linecap="round"/><path d="M9 41 L47 41" stroke="#ef4444" stroke-width="5" stroke-linecap="round"/></svg>`,
-  cone: `<svg viewBox="0 0 44 60"><path d="M22 5 L39 53 L5 53 Z" fill="#ff6a00" stroke="#c2410c" stroke-width="2.5"/><rect x="15" y="20" width="14" height="13" fill="#fff"/><rect x="5" y="53" width="34" height="6" rx="2" fill="#c2410c"/></svg>`,
-  box: `<svg viewBox="0 0 58 54"><rect x="5" y="9" width="48" height="40" fill="#c8894a" stroke="#8a5a2a" stroke-width="2.5"/><path d="M5 9 L29 2 L53 9 L29 16 Z" fill="#e0a85f" stroke="#8a5a2a" stroke-width="2"/><path d="M29 2 L29 16 M29 16 L5 9 M29 16 L53 9" stroke="#8a5a2a" stroke-width="1.5"/><path d="M5 33 L53 33" stroke="#facc15" stroke-width="9"/><path d="M5 33 L53 33" stroke="#111" stroke-width="9" stroke-dasharray="9 9"/></svg>`,
   plane: `<svg viewBox="0 0 100 60"><path d="M4 30 L50 6 L96 30 L50 54 Z" fill="#ffd400" stroke="#d99a00" stroke-width="2.5"/><path d="M50 6 L96 30 L50 30 Z" fill="#ffe98a" stroke="#d99a00" stroke-width="2"/><line x1="50" y1="6" x2="50" y2="54" stroke="#d99a00" stroke-width="1.8"/></svg>`,
+  rock: `<svg viewBox="0 0 70 54"><path d="M8 50 L18 22 L33 9 L49 21 L62 50 Z" fill="#3f4658" stroke="#1e2532" stroke-width="2.5"/><path d="M18 22 L33 9 L38 24 Z" fill="#5a6375"/><path d="M12 42 L56 42" stroke="#fff" stroke-width="8" stroke-linecap="round"/><path d="M12 42 L56 42" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round"/></svg>`,
+  cone: `<svg viewBox="0 0 56 62"><path d="M28 4 L54 57 L2 57 Z" fill="#ff6a00" stroke="#c2410c" stroke-width="2.5"/><rect x="20" y="22" width="16" height="14" fill="#fff"/><rect x="2" y="57" width="52" height="6" rx="2" fill="#c2410c"/></svg>`,
+  box: `<svg viewBox="0 0 66 56"><rect x="5" y="9" width="56" height="42" fill="#c8894a" stroke="#8a5a2a" stroke-width="2.5"/><path d="M5 9 L33 2 L61 9 L33 16 Z" fill="#e0a85f" stroke="#8a5a2a" stroke-width="2"/><path d="M33 2 L33 16 M33 16 L5 9 M33 16 L61 9" stroke="#8a5a2a" stroke-width="1.5"/><path d="M5 33 L61 33" stroke="#facc15" stroke-width="9"/><path d="M5 33 L61 33" stroke="#111" stroke-width="9" stroke-dasharray="9 9"/></svg>`,
+  trash: `<svg viewBox="0 0 62 62"><path d="M16 24 L20 60 L42 60 L46 24 Z" fill="#64748b" stroke="#334155" stroke-width="2"/><path d="M12 24 L50 24" stroke="#334155" stroke-width="3"/><rect x="22" y="16" width="18" height="8" rx="2" fill="#475569"/></svg>`,
+  ball: `<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#e8792b" stroke="#b45309" stroke-width="3"/><path d="M10 22 Q32 32 54 22" stroke="#b45309" stroke-width="3" fill="none"/><path d="M6 38 Q32 48 58 38" stroke="#b45309" stroke-width="3" fill="none"/><path d="M32 2 L32 62" stroke="#b45309" stroke-width="3"/></svg>`,
+  books: `<svg viewBox="0 0 68 52"><rect x="4" y="6" width="60" height="11" rx="2" fill="#e11d48"/><rect x="10" y="20" width="52" height="11" rx="2" fill="#2563eb"/><rect x="16" y="34" width="44" height="11" rx="2" fill="#16a34a"/></svg>`,
+  spikes: `<svg viewBox="0 0 88 34"><path d="M0 34 L8 10 L16 34 L24 10 L32 34 L40 10 L48 34 L56 10 L64 34 L72 10 L80 34 L88 10 L88 34 Z" fill="#94a3b8" stroke="#475569" stroke-width="2"/></svg>`,
+  desk: `<svg viewBox="0 0 90 74"><rect x="6" y="20" width="78" height="12" rx="3" fill="#8a5a2a" stroke="#5b3a1a" stroke-width="2"/><rect x="14" y="32" width="10" height="40" fill="#6b4423"/><rect x="66" y="32" width="10" height="40" fill="#6b4423"/><rect x="24" y="32" width="42" height="40" fill="#9a6b3a" stroke="#5b3a1a" stroke-width="2"/></svg>`,
+  tallBox: `<svg viewBox="0 0 92 150"><rect x="12" y="100" width="68" height="44" fill="#c8894a" stroke="#8a5a2a" stroke-width="3"/><rect x="8" y="54" width="76" height="48" fill="#b9773a" stroke="#8a5a2a" stroke-width="3"/><rect x="16" y="6" width="60" height="50" fill="#d89b55" stroke="#8a5a2a" stroke-width="3"/><path d="M20 42 L72 42 M22 80 L70 80 M20 122 L72 122" stroke="#facc15" stroke-width="7" stroke-dasharray="8 6"/></svg>`,
+  barrier: `<svg viewBox="0 0 100 162"><rect x="6" y="0" width="88" height="162" rx="6" fill="#334155" stroke="#1e293b" stroke-width="3"/><rect x="14" y="14" width="64" height="134" fill="#475569"/><path d="M18 20 L78 20 M18 60 L78 60 M18 100 L78 100 M18 140 L78 140" stroke="#facc15" stroke-width="8" stroke-dasharray="10 10"/></svg>`,
   dog: `<svg viewBox="0 0 110 70"><path d="M14 24 Q4 10 10 5" stroke="#8a5a3a" stroke-width="6" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="40" rx="34" ry="20" fill="#b07a48"/><rect x="40" y="54" width="9" height="14" rx="4" fill="#8a5a3a"/><rect x="52" y="54" width="9" height="14" rx="4" fill="#8a5a3a"/><rect x="72" y="54" width="9" height="14" rx="4" fill="#8a5a3a"/><rect x="84" y="54" width="9" height="14" rx="4" fill="#8a5a3a"/><circle cx="92" cy="28" r="16" fill="#b07a48"/><ellipse cx="90" cy="15" rx="6" ry="11" fill="#7a5230"/><ellipse cx="105" cy="33" rx="9" ry="7" fill="#c98f5f"/><circle cx="109" cy="31" r="3" fill="#2b2b2b"/><circle cx="93" cy="24" r="3.2" fill="#2b2b2b"/><circle cx="94.2" cy="22.8" r="1.1" fill="#fff"/></svg>`,
-  teacher: `<svg viewBox="0 0 120 190"><path d="M40 42 Q34 10 60 9 Q86 10 82 42 Q78 26 60 26 Q42 26 40 42 Z" fill="#8a8f98"/><circle cx="38" cy="40" r="5.5" fill="${SKIN}"/><circle cx="82" cy="40" r="5.5" fill="${SKIN}"/><ellipse cx="60" cy="40" rx="21" ry="23" fill="${SKIN}"/><circle cx="50" cy="40" r="5.5" fill="none" stroke="#333" stroke-width="2"/><circle cx="70" cy="40" r="5.5" fill="none" stroke="#333" stroke-width="2"/><line x1="55.5" y1="40" x2="64.5" y2="40" stroke="#333" stroke-width="2"/><circle cx="50" cy="40" r="2.4" fill="#333"/><circle cx="70" cy="40" r="2.4" fill="#333"/><path d="M53 50 Q60 57 67 50" stroke="#8a5a3a" stroke-width="2.3" fill="none" stroke-linecap="round"/><rect x="54" y="62" width="12" height="13" fill="${SKIN_SHADE}"/><path d="M40 74 L40 124 Q40 132 48 132 L72 132 Q80 132 80 124 L80 74 Q60 68 40 74 Z" fill="#f5f5f5" stroke="#d4d4d4" stroke-width="1.5"/><path d="M60 74 L54 96 L66 96 Z" fill="#c0392b"/><path d="M60 96 L54 132 L66 132 Z" fill="#c0392b"/><g class="arm armL"><path d="M41 80 Q29 94 29 112" stroke="${SKIN_SHADE}" stroke-width="9" fill="none" stroke-linecap="round"/><circle cx="29" cy="113" r="5" fill="${SKIN}"/></g><g class="arm armR"><path d="M79 80 Q91 94 91 112" stroke="${SKIN_SHADE}" stroke-width="9" fill="none" stroke-linecap="round"/><rect x="87" y="70" width="6" height="46" rx="3" fill="#8a5a2a"/><circle cx="91" cy="113" r="5" fill="${SKIN}"/></g>${LEGS_PANTS("#374151")}</svg>`
+  teacher: `<svg viewBox="0 0 120 190"><path d="M40 42 Q34 10 60 9 Q86 10 82 42 Q78 26 60 26 Q42 26 40 42 Z" fill="#8a8f98"/><circle cx="38" cy="40" r="5.5" fill="${SKIN}"/><circle cx="82" cy="40" r="5.5" fill="${SKIN}"/><ellipse cx="60" cy="40" rx="21" ry="23" fill="${SKIN}"/><circle cx="50" cy="40" r="5.5" fill="none" stroke="#333" stroke-width="2"/><circle cx="70" cy="40" r="5.5" fill="none" stroke="#333" stroke-width="2"/><line x1="55.5" y1="40" x2="64.5" y2="40" stroke="#333" stroke-width="2"/><circle cx="50" cy="40" r="2.4" fill="#333"/><circle cx="70" cy="40" r="2.4" fill="#333"/><path d="M53 50 Q60 57 67 50" stroke="#8a5a3a" stroke-width="2.3" fill="none" stroke-linecap="round"/><rect x="54" y="62" width="12" height="13" fill="${SKIN_SHADE}"/><path d="M40 74 L40 124 Q40 132 48 132 L72 132 Q80 132 80 124 L80 74 Q60 68 40 74 Z" fill="#f5f5f5" stroke="#d4d4d4" stroke-width="1.5"/><path d="M60 74 L54 96 L66 96 Z" fill="#c0392b"/><path d="M60 96 L54 132 L66 132 Z" fill="#c0392b"/><g class="arm armL"><path d="M41 80 Q29 94 29 112" stroke="${SKIN_SHADE}" stroke-width="9" fill="none" stroke-linecap="round"/><circle cx="29" cy="113" r="5" fill="${SKIN}"/></g><g class="arm armR"><path d="M79 80 Q91 94 91 112" stroke="${SKIN_SHADE}" stroke-width="9" fill="none" stroke-linecap="round"/><rect x="87" y="70" width="6" height="46" rx="3" fill="#8a5a2a"/><circle cx="91" cy="113" r="5" fill="${SKIN}"/></g>${`<g class="leg legL"><rect x="44" y="122" width="14" height="40" rx="6" fill="#374151"/><ellipse cx="51" cy="172" rx="9.5" ry="5" fill="#2b2b2b"/></g><g class="leg legR"><rect x="62" y="122" width="14" height="40" rx="6" fill="#374151"/><ellipse cx="69" cy="172" rx="9.5" ry="5" fill="#2b2b2b"/></g>`}</svg>`
 };
+
+/* ---------- obstacle definitions (bigger) ---------- */
+const DEFS = {
+  coin:  { w:52, h:52, obstacle:false },
+  plane: { w:104, h:66, obstacle:false },
+  star:  { w:66, h:66, obstacle:false },
+  shoes: { w:76, h:56, obstacle:false },
+  rock:  { w:92, h:70, obstacle:true, tall:false },
+  cone:  { w:72, h:80, obstacle:true, tall:false },
+  box:   { w:86, h:72, obstacle:true, tall:false },
+  trash: { w:82, h:82, obstacle:true, tall:false },
+  ball:  { w:84, h:84, obstacle:true, tall:false },
+  books: { w:90, h:68, obstacle:true, tall:false },
+  spikes:{ w:118, h:44, obstacle:true, tall:false },
+  desk:  { w:118, h:98, obstacle:true, tall:false },
+  tallBox: { w:118, h:195, obstacle:true, tall:true },
+  barrier: { w:130, h:210, obstacle:true, tall:true },
+};
+
+/* ---------- level themes ---------- */
+const THEMES = [
+  { name:"Korridori i Natës", accent:"#3b82f6" },
+  { name:"Biblioteka", accent:"#8b5cf6" },
+  { name:"Laboratori", accent:"#10b981" },
+  { name:"Palestra", accent:"#f59e0b" },
+  { name:"Kantina", accent:"#ef4444" },
+  { name:"Çatia", accent:"#06b6d4" },
+];
+
+/* ---------- 30 levels ---------- */
+function poolForLevel(n){
+  const p = ['rock','cone'];
+  if(n>=2) p.push('box');
+  if(n>=3) p.push('trash');
+  if(n>=4) p.push('spikes');
+  if(n>=5) p.push('ball');
+  if(n>=6) p.push('books');
+  if(n>=8) p.push('desk');
+  return p;
+}
+function tallPool(n){
+  const p = [];
+  if(n>=5) p.push('tallBox');
+  if(n>=14) p.push('barrier');
+  return p;
+}
+const LEVELS = [];
+for (let i=1;i<=30;i++){
+  LEVELS.push({
+    n: i,
+    target: (850 + i*55) * 40,
+    speed: 320 + (i-1)*13,
+    interval: Math.max(0.5, 0.95 - i*0.011),
+    tallChance: i < 5 ? 0 : Math.min(0.4, 0.05 + i*0.012),
+    chases: i < 15 ? 3 : 4,
+    theme: THEMES[(i-1) % THEMES.length],
+    pool: poolForLevel(i),
+  });
+}
+
+/* ---------- config ---------- */
+const PLAYER_X = 0.22, GROUND_H = 96, PLAYER_W = 200, PLAYER_H = 272;
+const CHASE_DURATION = 15;
+const POWER_DURATION = 15;
+const JUMP_V = 760, JUMP_V_SHOES = 1100, GRAVITY = 2300;
+const MAX_JUMPS = 2;
+const REWARD_COINS = 100, REWARD_PLANES = 30;
+const FREE_CHARS = ['sky','tricky','spike','anna'];
+const GUIDE_NAME = 'Udhëzuesi';
 
 /* ---------- DOM refs ---------- */
 const $ = s => document.querySelector(s);
-const selectScreen = $('#select-screen'), gameScreen = $('#game-screen'), overScreen = $('#over-screen');
-const gameArea = $('#game-area'), playerEl = $('#player'), chasersLayer = $('#chasers'), objectsLayer = $('#objects'), particlesLayer = $('#particles');
+const selectScreen = $('#select-screen'), gameScreen = $('#game-screen'), overScreen = $('#over-screen'), completeScreen = $('#complete-screen');
+const gameArea = $('#game-area'), playerEl = $('#player'), shadowEl = $('#player-shadow'), chasersLayer = $('#chasers'), racersLayer = $('#racers'), objectsLayer = $('#objects'), particlesLayer = $('#particles');
 const countdownEl = $('#countdown'), goFlashEl = $('#go-flash');
-const scoreEl = $('#score'), distEl = $('#dist'), coinsEl = $('#coins');
-
-/* ---------- config ---------- */
-const PLAYER_X = 0.22, GROUND_H = 96;
-const DOG_DELAY = 15;
-const DOG_CHASE_DURATION = 15;
-const POWER_DURATION = 15;
-const JUMP_V = 640, JUMP_V_SHOES = 980, GRAVITY = 2100;
-const COIN_SPEEDUP = 15;
+const scoreEl = $('#score'), distEl = $('#dist'), coinsEl = $('#coins'), planesEl = $('#planes');
+const progressFill = $('#progress-fill');
 
 /* ---------- state ---------- */
-let totalCoins = parseInt(localStorage.getItem('schoolrush_coins') || '0', 10);
-let owned = JSON.parse(localStorage.getItem('schoolrush_owned') || '["sky","tricky","spike"]');
-let best = parseInt(localStorage.getItem('schoolrush_best') || '0', 10);
-let bestDist = parseInt(localStorage.getItem('schoolrush_bestdist') || '0', 10);
+let totalCoins = parseInt(localStorage.getItem('sr_coins') || '0', 10);
+let totalPlanes = parseInt(localStorage.getItem('sr_planes') || '0', 10);
+let owned = JSON.parse(localStorage.getItem('sr_owned') || '["sky","tricky","spike","anna"]');
+FREE_CHARS.forEach(c => { if (!owned.includes(c)) owned.push(c); });
+let unlocked = Math.min(30, parseInt(localStorage.getItem('sr_unlocked') || '1', 10));
+let selChar = localStorage.getItem('sr_char') || 'sky';
+if (!CHARACTERS[selChar]) selChar = 'sky';
+let selLevel = Math.min(unlocked, parseInt(localStorage.getItem('sr_level') || '1', 10));
+
 let S = { screen:'select', phase:'idle' };
-let char = 'sky';
-let jumpH = 0, vy = 0, onGround = true;
+let mode = 'solo';
+let currentLevel = 1, levelObj = LEVELS[0];
+let jumpH = 0, vy = 0, onGround = true, jumps = 0;
 let objects = [];
-let distPx = 0, coins = 0, score = 0;
+let distPx = 0, coins = 0, planes = 0, score = 0;
 let puStar = 0, puShoes = 0;
-let elapsed = 0, spawnAcc = 0, speedLevel = 0, scoreMilestone = 0;
+let elapsed = 0, spawnAcc = 0;
 let speed = 320;
-let dogActive = false, dogGap = 0, dogBarkTimer = 0;
+let stunTimer = 0;
+let chaseActive = false, chaseTime = 0, dogGap = 0, barkTimer = 0;
+let chasesDone = 0, chaseTargets = [];
+let racers = [];
 let lastTime = 0;
 let area = { w:0, h:0 };
+
+/* ---------- persistence ---------- */
+function save(){
+  localStorage.setItem('sr_coins', String(totalCoins));
+  localStorage.setItem('sr_planes', String(totalPlanes));
+  localStorage.setItem('sr_owned', JSON.stringify(owned));
+  localStorage.setItem('sr_char', selChar);
+  localStorage.setItem('sr_level', String(selLevel));
+  localStorage.setItem('sr_unlocked', String(unlocked));
+}
 
 /* ---------- audio ---------- */
 let audioCtx = null;
@@ -531,13 +736,15 @@ function tone(f, d, type, vol, slideTo) {
 }
 const sfx = {
   jump: () => tone(300, 0.18, 'sine', 0.15, 700),
+  jump2: () => { tone(420, 0.15, 'sine', 0.16, 860); setTimeout(()=>tone(520,0.12,'sine',0.14,900),40); },
   coin: () => tone(900, 0.09, 'square', 0.12, 1400),
   plane: () => { tone(760,0.12,'triangle',0.18,1200); setTimeout(()=>tone(1200,0.14,'triangle',0.16,1800),70); },
   star: () => { tone(660,0.1,'triangle',0.16,990); setTimeout(()=>tone(990,0.12,'triangle',0.16,1480),80); },
   shoes: () => tone(200,0.2,'sawtooth',0.1,500),
   buy: () => { tone(880,0.1,'triangle',0.16,1320); setTimeout(()=>tone(1320,0.12,'triangle',0.16,1760),90); },
   die: () => { tone(500,0.3,'sawtooth',0.16,120); setTimeout(()=>tone(220,0.4,'sawtooth',0.16,80),180); },
-  bark: () => { tone(180,0.09,'sawtooth',0.14,120); setTimeout(()=>tone(150,0.09,'sawtooth',0.14,100),90); }
+  bark: () => { tone(180,0.09,'sawtooth',0.14,120); setTimeout(()=>tone(150,0.09,'sawtooth',0.14,100),90); },
+  complete: () => { [660,880,1100,1320].forEach((f,i)=>setTimeout(()=>tone(f,0.16,'triangle',0.16),i*120)); }
 };
 
 /* ---------- layout ---------- */
@@ -548,57 +755,119 @@ function computeLayout() {
 /* ---------- menu / shop ---------- */
 function buildMenu() {
   $('#coins-total').textContent = totalCoins;
-  $('#best-select').textContent = best;
-  $('#best-dist-select').textContent = bestDist;
-  const playWrap = $('#char-cards'); playWrap.innerHTML = '';
-  const shopWrap = $('#shop-cards'); shopWrap.innerHTML = '';
+  $('#planes-total').textContent = totalPlanes;
+  $('#unlocked-label').textContent = unlocked;
+  const coinsWrap = $('#char-cards-coins'); coinsWrap.innerHTML = '';
+  const planesWrap = $('#char-cards-planes'); planesWrap.innerHTML = '';
   Object.entries(CHARACTERS).forEach(([k, c]) => {
     const isOwned = owned.includes(k);
     const card = document.createElement('div');
-    card.className = 'char-card' + (isOwned ? '' : ' locked');
+    card.className = 'char-card' + (isOwned ? '' : ' locked') + (k === selChar && isOwned ? ' selected' : '');
+    const cur = c.currency === 'coins' ? '🪙' : '✈️';
+    const priceCls = c.currency === 'coins' ? 'coins' : 'planes';
+    const canAfford = c.currency === 'coins' ? totalCoins >= c.price : totalPlanes >= c.price;
     card.innerHTML = `
-      <div class="char-circle" style="background: radial-gradient(circle at 35% 30%, ${c.color}, ${c.color}cc);">${c.svg}</div>
+      <div class="char-circle" style="background: radial-gradient(circle at 35% 30%, ${c.color}, ${c.color}cc);">${CHARACTER_SVGS[k]}</div>
       <div class="char-name">${c.name}</div>
       <div class="char-desc">${c.desc}</div>
       ${isOwned
-        ? `<button class="char-pick" style="background:${c.color};">Luaj si ${c.name}</button>`
-        : `<div class="char-price">🪙 ${c.price}</div><button class="char-buy" data-key="${k}" ${totalCoins < c.price ? 'disabled' : ''}>Blej 🔒</button>`}`;
-    if (isOwned) { card.addEventListener('click', () => { ensureAudio(); startGame(k); }); playWrap.appendChild(card); }
-    else shopWrap.appendChild(card);
+        ? `<button class="char-pick">${k === selChar ? '✓ Zgjedhur' : 'Zgjidh'}</button>`
+        : `<div class="char-price ${priceCls}">${cur} ${c.price}</div><button class="char-buy ${priceCls}" data-key="${k}" ${canAfford ? '' : 'disabled'}>Blej 🔒</button>`}`;
+    if (isOwned) {
+      card.addEventListener('click', () => { selChar = k; save(); buildMenu(); });
+    }
+    if (c.currency === 'coins') coinsWrap.appendChild(card); else planesWrap.appendChild(card);
   });
   document.querySelectorAll('.char-buy').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); buyChar(b.dataset.key); }));
+
+  const grid = $('#level-grid'); grid.innerHTML = '';
+  for (let i=1;i<=30;i++){
+    const el = document.createElement('div');
+    const isUnlocked = i <= unlocked;
+    const done = i < unlocked;
+    el.className = 'lvl' + (i === selLevel ? ' selected' : '') + (done ? ' done' : '') + (!isUnlocked ? ' locked' : '');
+    el.innerHTML = !isUnlocked ? '<span class="lock-ico">🔒</span>' : String(i);
+    if (isUnlocked) el.addEventListener('click', () => { selLevel = i; save(); buildMenu(); });
+    grid.appendChild(el);
+  }
+  setMode(mode);
 }
 function buyChar(k) {
   const c = CHARACTERS[k];
-  if (owned.includes(k) || totalCoins < c.price) return;
-  totalCoins -= c.price; owned.push(k);
-  localStorage.setItem('schoolrush_coins', String(totalCoins));
-  localStorage.setItem('schoolrush_owned', JSON.stringify(owned));
-  sfx.buy(); buildMenu();
+  if (owned.includes(k)) return;
+  if (c.currency === 'coins' && totalCoins < c.price) return;
+  if (c.currency === 'planes' && totalPlanes < c.price) return;
+  if (c.currency === 'coins') totalCoins -= c.price; else totalPlanes -= c.price;
+  owned.push(k); selChar = k;
+  save(); sfx.buy(); buildMenu();
+}
+function setMode(m) {
+  mode = m;
+  $('#mode-solo').classList.toggle('active', m === 'solo');
+  $('#mode-race').classList.toggle('active', m === 'race');
+  $('#play-btn').textContent = m === 'race' ? '🏁 Nis garën' : '▶️ LUaj';
+}
+
+/* ---------- racers (race mode) ---------- */
+function initRacers() {
+  racersLayer.innerHTML = '';
+  racers = [];
+  const pool = Object.keys(CHARACTERS).filter(c => c !== selChar);
+  pool.sort(() => Math.random() - 0.5);
+  const others = pool.slice(0, 2);
+  const roles = ['guide', ...others];
+  roles.forEach((role, i) => {
+    const isGuide = role === 'guide';
+    const el = document.createElement('div');
+    el.className = 'racer running' + (isGuide ? ' guide' : '');
+    if (isGuide) {
+      el.style.width = '120px'; el.style.height = '180px';
+      el.innerHTML = '<img src="guide.png" alt="' + GUIDE_NAME + '">';
+    } else {
+      el.style.width = '150px'; el.style.height = '200px';
+      el.innerHTML = SIDES[role];
+    }
+    racersLayer.appendChild(el);
+    racers.push({ name: isGuide ? GUIDE_NAME : CHARACTERS[role].name, isGuide, dist: 0,
+      factor: isGuide ? (0.90 + Math.random()*0.04) : (0.86 + Math.random()*0.06),
+      phase: Math.random()*6.28, x: 0, el });
+  });
 }
 
 /* ---------- start ---------- */
-function startGame(charKey) {
-  char = charKey;
+function startGame(level) {
+  currentLevel = Math.min(30, Math.max(1, level));
+  levelObj = LEVELS[currentLevel - 1];
+  selLevel = currentLevel;
   S = { screen:'game', phase:'countdown', countdown:3.0, paused:false };
   objects.forEach(o => o.el.remove()); objects = [];
   chasersLayer.innerHTML = '';
-  jumpH = 0; vy = 0; onGround = true;
-  distPx = 0; coins = 0; score = 0; spawnAcc = 0; speed = 320;
-  puStar = 0; puShoes = 0; elapsed = 0; speedLevel = 0; scoreMilestone = 0;
-  dogActive = false; dogGap = 0; dogBarkTimer = 0;
+  jumpH = 0; vy = 0; onGround = true; jumps = 0;
+  distPx = 0; coins = 0; planes = 0; score = 0; spawnAcc = 0;
+  speed = levelObj.speed;
+  stunTimer = 0;
+  puStar = 0; puShoes = 0; elapsed = 0;
+  chaseActive = false; chaseTime = 0; dogGap = 0; barkTimer = 0; chasesDone = 0;
+  const n = levelObj.chases; chaseTargets = [];
+  for (let i=0;i<n;i++) chaseTargets.push(((i+1)/(n+1)) * levelObj.target);
+  if (mode === 'race') initRacers(); else racersLayer.innerHTML = '';
 
-  selectScreen.classList.add('hidden'); overScreen.classList.add('hidden'); gameScreen.classList.remove('hidden');
+  selectScreen.classList.add('hidden'); overScreen.classList.add('hidden'); completeScreen.classList.add('hidden');
+  gameScreen.classList.remove('hidden');
   $('#pause-btn').classList.remove('hidden');
   $('#pause-overlay').classList.add('hidden');
+  $('#race-chip').classList.toggle('hidden', mode !== 'race');
   gameArea.classList.remove('paused');
-  playerEl.innerHTML = SIDES[char] || CHARACTERS[char].svg;
+  gameArea.style.setProperty('--accent', levelObj.theme.accent);
+  playerEl.innerHTML = SIDES[selChar];
   playerEl.className = 'running';
+  $('#lvl-label').textContent = 'Niveli ' + currentLevel + ' · ' + levelObj.theme.name;
   computeLayout();
   playerEl.style.bottom = GROUND_H + 'px';
-  playerEl.style.left = (PLAYER_X * area.w) + 'px';
-  playerEl.style.transform = 'translateX(-50%)';
+  playerEl.style.left = (PLAYER_X * area.w - PLAYER_W/2) + 'px';
+  shadowEl.style.left = (PLAYER_X * area.w) + 'px';
   updateHUD(); updatePowerupUI();
+  save();
   lastTime = performance.now();
 }
 
@@ -606,6 +875,13 @@ function updateHUD() {
   scoreEl.textContent = Math.floor(score);
   distEl.textContent = Math.floor(distPx / 40);
   coinsEl.textContent = coins;
+  planesEl.textContent = planes;
+  const pct = Math.min(100, distPx / levelObj.target * 100);
+  progressFill.style.width = pct + '%';
+  if (mode === 'race') {
+    const ahead = racers.filter(r => r.dist > distPx).length;
+    $('#race-pos').textContent = (ahead + 1) + '/' + (racers.length + 1);
+  }
 }
 function updatePowerupUI() {
   $('#pu-star').classList.toggle('hidden', puStar <= 0);
@@ -616,31 +892,37 @@ function updatePowerupUI() {
 
 /* ---------- spawning ---------- */
 function spawnObj(type, oy, x) {
-  const sizes = { coin:44, star:54, shoes:60, plane:80, rock:84, cone:64, box:84 };
+  const d = DEFS[type];
   const el = document.createElement('div');
   el.className = 'obj ' + type;
-  el.style.width = sizes[type] + 'px';
-  el.style.height = sizes[type] + 'px';
+  el.style.width = d.w + 'px';
+  el.style.height = d.h + 'px';
   el.innerHTML = (type === 'plane') ? SVG.plane + '<span class="spark s1"></span><span class="spark s2"></span><span class="spark s3"></span>' : SVG[type];
   objectsLayer.appendChild(el);
-  objects.push({ el, type, x: x || (area.w + 60), oy: oy||0, obstacle: type==='rock'||type==='cone'||type==='box' });
+  objects.push({ el, type, x: x || (area.w + 80), oy: oy||0, w:d.w, h:d.h, obstacle: d.obstacle });
 }
 function spawnEvent() {
+  const lvl = levelObj;
   const r = Math.random();
-  if (r < 0.30) { // coin line along the ground
+  if (r < 0.26) {
     const n = 4 + Math.floor(Math.random()*3);
-    for (let i=0;i<n;i++) spawnObj('coin', 0, area.w + 60 + i*46);
-  } else if (r < 0.52) { // single coin or small group (some raised)
-    spawnObj('coin', Math.random() < 0.4 ? 55 : 0);
-    if (Math.random() < 0.5) spawnObj('coin', 0, area.w + 60 + 46);
-  } else if (r < 0.84) { // obstacle (jump over)
-    spawnObj(['rock','cone','box'][Math.floor(Math.random()*3)], 0);
-  } else if (r < 0.92) { // shining plane (high, needs jump)
+    for (let i=0;i<n;i++) spawnObj('coin', 0, area.w + 80 + i*50);
+  } else if (r < 0.38) {
+    spawnObj('coin', Math.random() < 0.4 ? 60 : 0);
+    if (Math.random() < 0.5) spawnObj('coin', 0, area.w + 80 + 50);
+  } else if (r < 0.44) {
     spawnObj('plane', 130);
-  } else if (r < 0.97) { // star (high)
-    spawnObj('star', 140);
-  } else { // shoes (high)
-    spawnObj('shoes', 140);
+  } else if (r < 0.50) {
+    spawnObj('star', 150);
+  } else if (r < 0.56) {
+    spawnObj('shoes', 150);
+  } else {
+    const talls = tallPool(currentLevel);
+    if (talls.length && Math.random() < lvl.tallChance) {
+      spawnObj(talls[Math.floor(Math.random()*talls.length)], 0);
+    } else {
+      spawnObj(lvl.pool[Math.floor(Math.random()*lvl.pool.length)], 0);
+    }
   }
 }
 
@@ -668,7 +950,7 @@ function dustPuff(x, y) {
   for (let i=0;i<6;i++){
     const p = document.createElement('div'); p.className='particle';
     const s = 5 + Math.random()*7; p.style.width=s+'px'; p.style.height=s+'px';
-    p.style.background = '#e8e2d0';
+    p.style.background = '#7a8aa0';
     p.style.left = (x + (Math.random()-0.5)*34) + 'px'; p.style.top = y + 'px';
     p.style.setProperty('--px', (Math.random()-0.5)*90+'px');
     p.style.setProperty('--py', -(10+Math.random()*30)+'px');
@@ -688,23 +970,43 @@ function streak() {
   s.style.width = (60 + Math.random()*140) + 'px';
   gameArea.appendChild(s); s.addEventListener('animationend', ()=>s.remove());
 }
-function milestoneFlash(pts) {
-  const m = document.createElement('div'); m.id='milestone';
-  m.textContent = '🎉 ' + pts + ' pikë!';
-  gameArea.appendChild(m); m.addEventListener('animationend', ()=>m.remove());
+
+/* ---------- chasers ---------- */
+function startChase() {
+  chaseActive = true; chaseTime = CHASE_DURATION; dogGap = 230; barkTimer = 3.2; chasesDone++;
+  chasersLayer.innerHTML = `<div class="chaser running" id="dog" style="width:96px;height:64px;">${SVG.dog}</div>
+    <div class="chaser running" id="teacher" style="width:96px;height:150px;">${SVG.teacher}</div>`;
+  sfx.bark(); warn('🐕🧑‍🏫 Qeni e arsimtari po të ndjekin!');
+}
+function endChase() {
+  chaseActive = false; chasersLayer.innerHTML = '';
+  warn('✅ Shpëtove! Nuk të ndjekin më!');
 }
 
 /* ---------- collect ---------- */
 function collect(o, cx, cy) {
   const mult = puStar > 0 ? 2 : 1;
   if (o.type === 'coin') { coins++; score += 10*mult; sfx.coin(); burst(cx, cy, ['#ffd400','#fff8c0','#ffe98a'], 6); ring(cx, cy, '#ffd400', 50); floatText(cx, cy, '+'+(10*mult), '#ffd400'); }
-  else if (o.type === 'plane') { score += 100*mult; sfx.plane(); burst(cx, cy, ['#ffd400','#fff','#ffe98a','#fff3c4'], 14); ring(cx, cy, '#ffd400', 90); floatText(cx, cy, '+'+(100*mult)+' ✈️', '#ffd400'); }
+  else if (o.type === 'plane') { planes++; score += 100*mult; sfx.plane(); burst(cx, cy, ['#ffd400','#fff','#ffe98a','#fff3c4'], 14); ring(cx, cy, '#ffd400', 90); floatText(cx, cy, '+1 ✈️', '#93c5fd'); }
   else if (o.type === 'star') { puStar = POWER_DURATION; score += 50*mult; sfx.star(); burst(cx, cy, ['#ffd400','#fff','#ffe98a'], 12); ring(cx, cy, '#ffd400', 110); floatText(cx, cy, '⭐ x2 pikë!', '#ffd400'); }
   else if (o.type === 'shoes') { puShoes = POWER_DURATION; score += 50*mult; sfx.shoes(); burst(cx, cy, ['#3b82f6','#93c5fd','#fff'], 12); ring(cx, cy, '#60a5fa', 110); floatText(cx, cy, '👟 Kërcim i lartë!', '#60a5fa'); }
   updateHUD(); updatePowerupUI();
 }
 
-/* ---------- death ---------- */
+/* ---------- stumble (race mode only) ---------- */
+function stumble() {
+  distPx = Math.max(0, distPx - 120);
+  stunTimer = 0.7;
+  gameArea.classList.add('shake');
+  setTimeout(() => gameArea.classList.remove('shake'), 400);
+  playerEl.classList.add('hurt');
+  setTimeout(() => playerEl.classList.remove('hurt'), 400);
+  sfx.die();
+  warn('💥 U pengove! Humbe shpejtësi e pozitë!');
+  floatText(PLAYER_X * area.w, area.h - GROUND_H - 150, '👎 Pengesë!', '#f87171');
+}
+
+/* ---------- death / complete / race result ---------- */
 function die(reason) {
   S.phase = 'over';
   gameArea.classList.add('shake');
@@ -712,23 +1014,74 @@ function die(reason) {
   $('#pause-btn').classList.add('hidden');
   playerEl.classList.add('dead'); playerEl.classList.remove('running','jump');
   sfx.die();
-  totalCoins += coins;
-  localStorage.setItem('schoolrush_coins', String(totalCoins));
-  const curDist = Math.floor(distPx/40);
-  if (curDist > bestDist) { bestDist = curDist; localStorage.setItem('schoolrush_bestdist', String(bestDist)); }
-  const isNew = Math.floor(score) > best;
-  if (isNew) { best = Math.floor(score); localStorage.setItem('schoolrush_best', String(best)); }
-  $('#over-title').textContent = reason === 'dog' ? '🐕 Qeni e arsimtari të kapën!' : '💥 U përplase me pengesën!';
+  totalCoins += coins; totalPlanes += planes;
+  save();
+  $('#over-title').textContent = '💪 Better luck next time!';
+  $('#over-sub').textContent = reason === 'dog' ? '🐕 Qeni e arsimtari të kapën!' : '💥 U përplase me pengesën!';
   $('#final-score').textContent = Math.floor(score);
   $('#final-dist').textContent = Math.floor(distPx/40);
   $('#final-coins').textContent = '+' + coins;
-  const fb = $('#final-best');
-  fb.classList.toggle('new', isNew);
-  fb.innerHTML = isNew ? '🎉 Rekord i ri! <span id="final-best-val">'+best+'</span>' : '🏆 Rekordi: <span id="final-best-val">'+best+'</span>';
+  $('#over-level').textContent = currentLevel;
   setTimeout(()=>{ overScreen.classList.remove('hidden'); }, 500);
+}
+function completeLevel() {
+  S.phase = 'complete';
+  chasersLayer.innerHTML = ''; chaseActive = false;
+  $('#pause-btn').classList.add('hidden');
+  playerEl.classList.remove('jump'); playerEl.classList.add('running');
+  sfx.complete();
+  totalCoins += coins + REWARD_COINS;
+  totalPlanes += planes + REWARD_PLANES;
+  if (currentLevel + 1 > unlocked) unlocked = Math.min(30, currentLevel + 1);
+  save();
+  $('#complete-title').textContent = '🎉 Good job!';
+  $('#complete-sub').textContent = 'Niveli ' + currentLevel + ' u kompletua!';
+  $('#complete-score').textContent = Math.floor(score);
+  $('#complete-coins').textContent = '+' + (coins + REWARD_COINS);
+  $('#complete-planes').textContent = '+' + (planes + REWARD_PLANES);
+  const hasNext = currentLevel < 30;
+  const nl = $('#next-level');
+  nl.disabled = !hasNext;
+  nl.textContent = hasNext ? '▶️ Niveli ' + (currentLevel+1) : '🏆 Të gjitha nivelet u kryen!';
+  setTimeout(()=>{ completeScreen.classList.remove('hidden'); }, 400);
+}
+function finishRace(win, loserName) {
+  S.phase = win ? 'complete' : 'over';
+  chasersLayer.innerHTML = ''; chaseActive = false;
+  $('#pause-btn').classList.add('hidden');
+  playerEl.classList.remove('jump'); playerEl.classList.add('running');
+  if (win) {
+    sfx.complete();
+    totalCoins += coins + REWARD_COINS;
+    totalPlanes += planes + REWARD_PLANES;
+    if (currentLevel + 1 > unlocked) unlocked = Math.min(30, currentLevel + 1);
+    save();
+    $('#complete-title').textContent = '🎉 Good job!';
+    $('#complete-sub').textContent = 'E fitove garën! Arrite i pari në finish! 🥇';
+    $('#complete-score').textContent = Math.floor(score);
+    $('#complete-coins').textContent = '+' + (coins + REWARD_COINS);
+    $('#complete-planes').textContent = '+' + (planes + REWARD_PLANES);
+    const hasNext = currentLevel < 30;
+    const nl = $('#next-level');
+    nl.disabled = !hasNext;
+    nl.textContent = hasNext ? '▶️ Garë tjetër (Niveli ' + (currentLevel+1) + ')' : '🏆 Mbarove të gjitha garat!';
+    setTimeout(()=>{ completeScreen.classList.remove('hidden'); }, 400);
+  } else {
+    sfx.die();
+    totalCoins += coins; totalPlanes += planes;
+    save();
+    $('#over-title').textContent = '💪 Better luck next time!';
+    $('#over-sub').textContent = (loserName ? loserName + ' arriti i pari në finish!' : 'Qeni e arsimtari të kapën!');
+    $('#final-score').textContent = Math.floor(score);
+    $('#final-dist').textContent = Math.floor(distPx/40);
+    $('#final-coins').textContent = '+' + coins;
+    $('#over-level').textContent = currentLevel;
+    setTimeout(()=>{ overScreen.classList.remove('hidden'); }, 500);
+  }
 }
 
 /* ---------- main loop ---------- */
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 function loop(now) {
   const dt = Math.min(0.05, (now - lastTime)/1000);
   lastTime = now;
@@ -740,40 +1093,46 @@ function loop(now) {
       else { countdownEl.classList.add('hidden'); S.phase = 'playing'; goFlashEl.classList.remove('hidden'); setTimeout(()=>goFlashEl.classList.add('hidden'), 800); tone(660,.2,'sine',.2,990); }
     } else if (S.phase === 'playing') {
       elapsed += dt;
-      const coinLevel = Math.floor(coins / COIN_SPEEDUP);
-      speed = Math.min(860, 320 + elapsed * 7 + coinLevel * 30);
-      if (coinLevel > speedLevel) { speedLevel = coinLevel; warn('⚡ Shpejtësi +! (' + (coinLevel*COIN_SPEEDUP) + ' monedha)'); for (let i=0;i<7;i++) streak(); }
       const mult = puStar > 0 ? 2 : 1;
 
-      distPx += speed * dt;
-      score += speed * dt * 0.04 * mult;
-      const ms = Math.floor(score / 1000);
-      if (ms > scoreMilestone) { scoreMilestone = ms; milestoneFlash(ms * 1000); }
+      if (stunTimer > 0) stunTimer -= dt;
+      const effSpeed = speed * (stunTimer > 0 ? 0.5 : 1);
+      distPx += effSpeed * dt;
+      score += effSpeed * dt * 0.04 * mult;
+
+      if (distPx >= levelObj.target) {
+        if (mode === 'race') finishRace(true); else completeLevel();
+        updateHUD(); requestAnimationFrame(loop); return;
+      }
+      if (mode === 'race') {
+        racers.forEach(r => {
+          r.factor = clamp(r.factor + Math.sin(elapsed*0.4 + r.phase)*0.0016, 0.8, 1.0);
+          r.dist += speed * r.factor * dt;
+          const delta = r.dist - distPx;
+          r.x = PLAYER_X * area.w + clamp(delta * 0.32, -area.w*0.16, area.w*0.6);
+          r.el.style.left = (r.x - 75) + 'px';
+          r.el.style.bottom = GROUND_H + 'px';
+        });
+        const winner = racers.find(r => r.dist >= levelObj.target);
+        if (winner) { finishRace(false, winner.name); updateHUD(); requestAnimationFrame(loop); return; }
+      }
 
       if (puStar > 0) { puStar -= dt; if (puStar <= 0) puStar = 0; }
       if (puShoes > 0) { puShoes -= dt; if (puShoes <= 0) puShoes = 0; }
       updatePowerupUI();
 
-      // chasers — dog + teacher appear behind (left) and close in
-      if (!dogActive && elapsed >= DOG_DELAY && elapsed < DOG_DELAY + DOG_CHASE_DURATION) {
-        dogActive = true; dogGap = 260; dogBarkTimer = 8;
-        chasersLayer.innerHTML = `<div class="chaser running" id="dog" style="width:96px;height:64px;">${SVG.dog}</div>
-          <div class="chaser running" id="teacher" style="width:96px;height:150px;">${SVG.teacher}</div>`;
-        sfx.bark(); warn('🐕🧑🏫 Qeni e arsimtari po të ndjekin!');
-      }
-      if (dogActive) {
-        if (elapsed >= DOG_DELAY + DOG_CHASE_DURATION) {
-          dogActive = false; chasersLayer.innerHTML = '';
-          warn('✅ Shpëtove! Nuk të ndjekin më!');
-        } else {
-          dogGap -= (34 + speed * 0.012) * dt;
-          dogBarkTimer -= dt;
-          if (dogBarkTimer <= 0) { dogBarkTimer = 7; dogGap += 130; sfx.bark(); }
+      if (!chaseActive && chasesDone < chaseTargets.length && distPx >= chaseTargets[chasesDone]) startChase();
+      if (chaseActive) {
+        chaseTime -= dt;
+        if (chaseTime <= 0) { endChase(); }
+        else {
+          dogGap += (55 - dogGap) * Math.min(1, 0.9*dt);
+          barkTimer -= dt;
+          if (barkTimer <= 0) { barkTimer = 3.2 + Math.random()*1.6; dogGap -= 45; sfx.bark(); }
           const px = PLAYER_X * area.w;
           const d = $('#dog'), t = $('#teacher');
           if (d) { d.style.left = (px - dogGap - 60) + 'px'; d.style.bottom = (GROUND_H + 4) + 'px'; }
           if (t) { t.style.left = (px - dogGap - 30) + 'px'; t.style.bottom = (GROUND_H + 4) + 'px'; }
-          if (dogGap <= 14) die('dog');
         }
       }
 
@@ -781,37 +1140,42 @@ function loop(now) {
       if (!onGround) {
         vy -= GRAVITY * dt; jumpH += vy * dt;
         if (jumpH <= 0) {
-          jumpH = 0; vy = 0; onGround = true;
-          playerEl.classList.remove('jump'); playerEl.classList.add('running');
+          jumpH = 0; vy = 0; onGround = true; jumps = 0;
+          playerEl.classList.remove('jump','dbljump'); playerEl.classList.add('running');
           dustPuff(PLAYER_X * area.w, area.h - GROUND_H - 8);
           const svg = playerEl.querySelector('svg');
           if (svg) { svg.classList.add('land'); setTimeout(()=>svg.classList.remove('land'), 300); }
         }
       }
       playerEl.style.bottom = (GROUND_H + jumpH) + 'px';
+      // shadow follows + shrinks with height
+      shadowEl.style.opacity = clamp(0.5 - jumpH/520, 0.12, 0.5);
+      shadowEl.style.transform = 'translateX(-50%) scaleX(' + clamp(1 - jumpH/520, 0.45, 1) + ')';
 
       // spawn
       spawnAcc += dt;
-      const interval = Math.max(0.5, 1.05 - speed * 0.0008);
-      if (spawnAcc >= interval) { spawnAcc = 0; spawnEvent(); }
+      if (spawnAcc >= levelObj.interval) { spawnAcc = 0; spawnEvent(); }
 
-      // objects — scroll left, AABB collision
+      // objects
       const px = PLAYER_X * area.w;
-      const pL = px - 34, pR = px + 34, pTop = area.h - GROUND_H - jumpH - 100, pBottom = area.h - GROUND_H - jumpH;
+      const groundY = area.h - GROUND_H;
+      const pL = px - 40, pR = px + 40, pTop = groundY - jumpH - 130, pBottom = groundY - jumpH;
       for (let i = objects.length - 1; i >= 0 && S.phase === 'playing'; i--) {
         const o = objects[i];
-        o.x -= speed * dt;
-        const size = parseInt(o.el.style.width, 10) || 44;
-        const oTop = area.h - GROUND_H - (o.oy||0) - size;
-        const oBottom = area.h - GROUND_H - (o.oy||0);
-        const xOverlap = (o.x + size) > pL && o.x < pR;
+        o.x -= effSpeed * dt;
+        const oTop = groundY - (o.oy||0) - o.h;
+        const oBottom = groundY - (o.oy||0);
+        const xOverlap = (o.x + o.w) > pL && o.x < pR;
         const yOverlap = oBottom > pTop && oTop < pBottom;
         if (xOverlap && yOverlap) {
-          if (o.obstacle) { die('obstacle'); break; }
-          else collect(o, o.x + size/2, oTop - 6);
+          if (o.obstacle) {
+            if (mode === 'race') { stumble(); o.el.remove(); objects.splice(i, 1); continue; }
+            else { die(chaseActive ? 'dog' : 'obstacle'); break; }
+          }
+          else collect(o, o.x + o.w/2, oTop - 6);
           o.el.remove(); objects.splice(i, 1); continue;
         }
-        if (o.x < -90) { o.el.remove(); objects.splice(i, 1); continue; }
+        if (o.x < -140) { o.el.remove(); objects.splice(i, 1); continue; }
         o.el.style.left = o.x + 'px';
         o.el.style.bottom = (GROUND_H + (o.oy||0)) + 'px';
       }
@@ -823,15 +1187,31 @@ function loop(now) {
 }
 
 /* ---------- input ---------- */
-function doJump() { if (S.phase !== 'playing' || !onGround) return; onGround = false; vy = puShoes > 0 ? JUMP_V_SHOES : JUMP_V; playerEl.classList.remove('running'); playerEl.classList.add('jump'); sfx.jump(); }
+function doJump() {
+  if (S.phase !== 'playing') return;
+  if (onGround) {
+    onGround = false; jumps = 1;
+    vy = puShoes > 0 ? JUMP_V_SHOES : JUMP_V;
+    playerEl.classList.remove('running'); playerEl.classList.add('jump');
+    sfx.jump();
+  } else if (jumps < MAX_JUMPS) {
+    jumps = 2;
+    vy = puShoes > 0 ? JUMP_V_SHOES * 0.9 : JUMP_V * 0.92;
+    playerEl.classList.add('dbljump');
+    setTimeout(() => playerEl.classList.remove('dbljump'), 500);
+    ring(PLAYER_X * area.w, area.h - GROUND_H - jumpH - 30, '#a5f3fc', 70);
+    sfx.jump2();
+  }
+}
 
 let swipeStart = null;
-gameArea.addEventListener('pointerdown', e => { ensureAudio(); swipeStart = { x:e.clientX, y:e.clientY }; });
+gameArea.addEventListener('pointerdown', e => { ensureAudio(); swipeStart = { x:e.clientX, y:e.clientY, t:performance.now() }; });
 gameArea.addEventListener('pointerup', e => {
   if (!swipeStart) return;
-  const dy = e.clientY - swipeStart.y;
+  const dy = e.clientY - swipeStart.y, dx = e.clientX - swipeStart.x;
+  const dtm = performance.now() - swipeStart.t;
   swipeStart = null;
-  if (dy < -40) doJump();
+  if (dy < -25 || (Math.hypot(dx,dy) < 14 && dtm < 260)) doJump();
 });
 window.addEventListener('keydown', e => {
   if (S.screen !== 'game') return;
@@ -868,11 +1248,18 @@ function pauseToMenu() {
 }
 
 /* ---------- buttons ---------- */
-$('#play-again').addEventListener('click', () => { ensureAudio(); startGame(char); });
+$('#play-btn').addEventListener('click', () => { ensureAudio(); startGame(selLevel); });
+$('#play-again').addEventListener('click', () => { ensureAudio(); startGame(currentLevel); });
+$('#next-level').addEventListener('click', () => { ensureAudio(); if (currentLevel < 30) startGame(currentLevel + 1); });
 $('#change-char').addEventListener('click', () => { ensureAudio(); overScreen.classList.add('hidden'); gameScreen.classList.add('hidden'); selectScreen.classList.remove('hidden'); buildMenu(); });
+$('#complete-menu').addEventListener('click', () => { ensureAudio(); completeScreen.classList.add('hidden'); gameScreen.classList.add('hidden'); selectScreen.classList.remove('hidden'); buildMenu(); });
 $('#pause-btn').addEventListener('click', () => { ensureAudio(); pauseGame(); });
 $('#resume-btn').addEventListener('click', () => { ensureAudio(); resumeGame(); });
 $('#pause-menu-btn').addEventListener('click', () => { ensureAudio(); pauseToMenu(); });
+$('#mode-solo').addEventListener('click', () => setMode('solo'));
+$('#mode-race').addEventListener('click', () => setMode('race'));
+$('#guide-row').addEventListener('click', () => { $('#guide-overlay').classList.remove('hidden'); });
+$('#guide-close').addEventListener('click', () => { $('#guide-overlay').classList.add('hidden'); });
 
 /* ---------- init ---------- */
 buildMenu();
